@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
 
 /**
  * The properties associated with a stavrox analysis, as parsed from the

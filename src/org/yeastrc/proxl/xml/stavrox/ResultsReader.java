@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
+
 /**
  * Read the PSM-level results from Results.csv in the zipped results file
  * @author mriffle

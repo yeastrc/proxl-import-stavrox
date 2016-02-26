@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
+
 /**
  * Read the properties out of a properties file in the results file of a StavroX analysis
  * @author mriffle
