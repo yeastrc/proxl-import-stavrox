@@ -2,8 +2,15 @@ package org.yeastrc.proxl.xml.stavrox;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class StavroxCrosslinker {
 
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString( this );
+	}
+	
 	public String getName() {
 		return name;
 	}

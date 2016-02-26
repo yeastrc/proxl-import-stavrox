@@ -1,6 +1,13 @@
 package org.yeastrc.proxl.xml.stavrox;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class StavroxVariableModification {
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString( this );
+	}
 	
 	public String getFrom() {
 		return from;

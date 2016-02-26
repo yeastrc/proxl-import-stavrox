@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * The properties associated with a stavrox analysis, as parsed from the
  * properties.ssf file in the stavrox results zip file.
@@ -15,6 +17,11 @@ public class AnalysisProperties {
 	
 	public StavroxCrosslinker getCrosslinker() {
 		return this.crosslinkers.get( this.getCrosslinkerIndex() );
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString( this );
 	}
 	
 	public Map<String, String> getAnalysisSettings() {

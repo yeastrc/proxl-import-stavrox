@@ -34,6 +34,7 @@ public class PropertiesReader {
 		ap.setProteaseLines( new ArrayList<StavroxProteaseLine>() );
 		ap.setStaticMods( new HashMap<String, StavroxStaticModification>() );
 		ap.setVariableMods( new HashMap<String, StavroxVariableModification>() );
+		ap.setCrosslinkers( new ArrayList<StavroxCrosslinker>() );
 		
 		BufferedReader br = null;
 		try {
@@ -83,6 +84,13 @@ public class PropertiesReader {
 				// handle processing the various sections of the properties file
 				
 				if( mode == SETTINGS ) {
+					
+					// for some reason, the settings at the beginning of this file do not have a header line or an END line
+					if( currentLine.equals( "ELEMENTS" ) ) {
+						mode = ELEMENTS;
+						continue;
+					}
+					
 					String fields[] = currentLine.split( "=" );
 					ap.getAnalysisSettings().put( fields[ 0 ],  fields[ 1 ] );
 				}

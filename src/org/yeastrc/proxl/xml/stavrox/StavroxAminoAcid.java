@@ -1,5 +1,7 @@
 package org.yeastrc.proxl.xml.stavrox;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * A representation of an amino acid by StavroX
  * @author mriffle
@@ -11,6 +13,11 @@ public class StavroxAminoAcid {
 		this.letterCode = letterCode;
 		this.name = name;
 		this.formula = formula;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString( this );
 	}
 	
 	public String getLetterCode() {
