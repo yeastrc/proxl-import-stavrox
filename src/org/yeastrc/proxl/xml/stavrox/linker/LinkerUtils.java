@@ -23,7 +23,7 @@ public class LinkerUtils {
 			formula = formula.substring( 1 );			
 		}
 
-		double mass = MassUtils.getMass( formula, properties );
+		double mass = MassUtils.getMassFromFormula( formula, properties );
 		if( negative ) { mass = mass * -1; }
 		
 		return mass;

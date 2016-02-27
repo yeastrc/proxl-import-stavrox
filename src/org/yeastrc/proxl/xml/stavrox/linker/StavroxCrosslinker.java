@@ -3,9 +3,21 @@ package org.yeastrc.proxl.xml.stavrox.linker;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.yeastrc.proxl.xml.stavrox.AnalysisProperties;
 
 public class StavroxCrosslinker {
 
+	/**
+	 * Get the mass of this crosslinker, using the masses for elements found
+	 * in a given analysis properties file.
+	 * @param properties
+	 * @return
+	 * @throws Exception
+	 */
+	public double getMass( AnalysisProperties properties ) throws Exception {
+		return LinkerUtils.calculateLinkerMass( this, properties );
+	}
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString( this );

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
+import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
+import org.yeastrc.proxl.xml.stavrox.mods.StavroxVariableModification;
 
 /**
  * The properties associated with a stavrox analysis, as parsed from the
