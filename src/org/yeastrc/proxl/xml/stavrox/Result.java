@@ -3,7 +3,23 @@ package org.yeastrc.proxl.xml.stavrox;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
 
+/**
+ * A line from the Results.csv file in the zipped stavrox results file.
+ * @author Valued Customer
+ *
+ */
 public class Result {	
+	
+	/**
+	 * Get a "reported peptide" string that unique identifies the crosslinked
+	 * pair of peptides in this result, including positions linked in those
+	 * peptides and any variable mods in those peptides.
+	 * 
+	 * @return
+	 */
+	public String getReportedPeptideString() {
+		return this.getPeptide1() + "(" + this.getPosition1String() + ")--" + this.getPeptide2() + "(" + this.getPosition2String() + ")";
+	}
 	
 	@Override
 	public String toString() {

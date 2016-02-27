@@ -50,6 +50,7 @@ public class StavroxAnalysisLoader {
 			
 			sa.setAnalysisResults( analysisResults );
 			
+			/*
 			System.out.println( "Loaded: " + sa.getAnalysisResults().keySet().size() + " scans." );			
 
 
@@ -59,6 +60,7 @@ public class StavroxAnalysisLoader {
 					System.out.println( r );
 				}
 			}
+			*/
 			
 
 			

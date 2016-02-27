@@ -12,8 +12,8 @@ public class PSMAnnotationTypes {
 
 	public static final String ANNOTATION_TYPE_SCORE = "score";
 	public static final String ANNOTATION_TYPE_MOVERZ = "m/z";
-	public static final String ANNOTATION_TYPE_OBSERVED_MASS = "obsmass";
-	public static final String ANNOTATION_TYPE_CANDIDATE_MASS = "candmass";
+	public static final String ANNOTATION_TYPE_OBSERVED_MASS = "obs. mass";
+	public static final String ANNOTATION_TYPE_CANDIDATE_MASS = "cand. mass";
 	public static final String ANNOTATION_TYPE_DEVIATION = "deviation";
 	
 	/**

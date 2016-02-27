@@ -2,23 +2,41 @@ package org.yeastrc.proxl.xml.stavrox;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Map;
 
-import org.yeastrc.proxl.xml.stavrox.linker.LinkerMapper;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMass;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMasses;
 import org.yeastrc.proxl_import.api.xml_dto.DefaultVisibleAnnotations;
+import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotation;
 import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotationTypes;
+import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotations;
+import org.yeastrc.proxl_import.api.xml_dto.FilterablePsmAnnotation;
 import org.yeastrc.proxl_import.api.xml_dto.FilterablePsmAnnotationTypes;
+import org.yeastrc.proxl_import.api.xml_dto.FilterablePsmAnnotations;
+import org.yeastrc.proxl_import.api.xml_dto.LinkType;
+import org.yeastrc.proxl_import.api.xml_dto.LinkedPosition;
+import org.yeastrc.proxl_import.api.xml_dto.LinkedPositions;
 import org.yeastrc.proxl_import.api.xml_dto.Linker;
 import org.yeastrc.proxl_import.api.xml_dto.Linkers;
+import org.yeastrc.proxl_import.api.xml_dto.Modification;
+import org.yeastrc.proxl_import.api.xml_dto.Modifications;
+import org.yeastrc.proxl_import.api.xml_dto.Peptide;
+import org.yeastrc.proxl_import.api.xml_dto.Peptides;
 import org.yeastrc.proxl_import.api.xml_dto.ProxlInput;
+import org.yeastrc.proxl_import.api.xml_dto.Psm;
+import org.yeastrc.proxl_import.api.xml_dto.Psms;
+import org.yeastrc.proxl_import.api.xml_dto.ReportedPeptide;
+import org.yeastrc.proxl_import.api.xml_dto.ReportedPeptides;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgram;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgram.PsmAnnotationTypes;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgramInfo;
 import org.yeastrc.proxl_import.api.xml_dto.SearchPrograms;
 import org.yeastrc.proxl_import.api.xml_dto.StaticModification;
 import org.yeastrc.proxl_import.api.xml_dto.StaticModifications;
+import org.yeastrc.proxl_import.api.xml_dto.VisiblePsmAnnotations;
+import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.CreateImportFileFromJavaObjectsMain;
 
 /**
  * Take the results of a StavroX analysis and build the ProXL XML
@@ -27,7 +45,7 @@ import org.yeastrc.proxl_import.api.xml_dto.StaticModifications;
  */
 public class XMLBuilder {
 
-	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilename, File outputFile ) throws Exception {
+	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilename, String scanFilename, File outputFile ) throws Exception {
 		
 		ProxlInput proxlInputRoot = new ProxlInput();
 		proxlInputRoot.setFastaFilename( fastaFilename );
@@ -63,8 +81,11 @@ public class XMLBuilder {
 		//
 		// Define which annotation types are visible by default
 		//
-		DefaultVisibleAnnotations visibleAnnotations = new DefaultVisibleAnnotations();
-		visibleAnnotations.getVisiblePsmAnnotations().getSearchAnnotation().addAll( PSMDefaultVisibleAnnotationTypes.getDefaultVisibleAnnotationTypes() );
+		DefaultVisibleAnnotations xmlDefaultVisibleAnnotations = new DefaultVisibleAnnotations();
+		VisiblePsmAnnotations xmlVisiblePsmAnnotations = new VisiblePsmAnnotations();
+		xmlDefaultVisibleAnnotations.setVisiblePsmAnnotations( xmlVisiblePsmAnnotations );
+
+		xmlVisiblePsmAnnotations.getSearchAnnotation().addAll( PSMDefaultVisibleAnnotationTypes.getDefaultVisibleAnnotationTypes() );
 
 		
 		
@@ -86,7 +107,7 @@ public class XMLBuilder {
 		linker.getCrosslinkMasses().getCrosslinkMass().add( xlinkMass );
 
 		// set the mass for this crosslinker to the calculated mass for the crosslinker, as defined in the properties file
-		xlinkMass.setMass( new BigDecimal( analysis.getAnalysisProperties().getCrosslinker().getMass( analysis.getAnalysisProperties() ) ) );
+		xlinkMass.setMass( NumberUtils.getRoundedBigDecimal( analysis.getAnalysisProperties().getCrosslinker().getMass( analysis.getAnalysisProperties() ) ) );
 
 		
 		
@@ -102,7 +123,7 @@ public class XMLBuilder {
 			StaticModification xmlSmod = new StaticModification();
 			
 			xmlSmod.setAminoAcid( stavroxSmod.getFrom() );
-			xmlSmod.setMassChange( new BigDecimal( stavroxSmod.getMassShift( analysis.getAnalysisProperties() ) ) );			
+			xmlSmod.setMassChange( NumberUtils.getRoundedBigDecimal( stavroxSmod.getMassShift( analysis.getAnalysisProperties() ) ) );			
 			
 			smods.getStaticModification().add( xmlSmod );
 		}
@@ -112,11 +133,156 @@ public class XMLBuilder {
 		//
 		// Define the peptide and PSM data
 		//
+		ReportedPeptides reportedPeptides = new ReportedPeptides();
+		proxlInputRoot.setReportedPeptides( reportedPeptides );
 		
-		
-		
-		
-		
+		Map<String, ParsedReportedPeptide> reportedPeptidesAndResults = ParsedReportedPeptideUtils.getParsedReportedPeptideFromResults( analysis );
+
+		for( String reportedPeptideString : reportedPeptidesAndResults.keySet() ) {
+			
+			ReportedPeptide xmlReportedPeptide = new ReportedPeptide();
+			reportedPeptides.getReportedPeptide().add( xmlReportedPeptide );
+			
+			xmlReportedPeptide.setReportedPeptideString( reportedPeptideString );
+			xmlReportedPeptide.setType( LinkType.CROSSLINK );
+			
+			Peptides xmlPeptides = new Peptides();
+			xmlReportedPeptide.setPeptides( xmlPeptides );
+			
+			// add in the parsed peptides
+			for( ParsedPeptide peptide : reportedPeptidesAndResults.get( reportedPeptideString ).getPeptides() ) {
+				Peptide xmlPeptide = new Peptide();
+				xmlPeptides.getPeptide().add( xmlPeptide );
+				
+				xmlPeptide.setSequence( peptide.getSequence() );
+				
+				if( peptide.getMods() != null && peptide.getMods().size() > 0 ) {
+					
+					Modifications xmlModifications = new Modifications();
+					xmlPeptide.setModifications( xmlModifications );
+					
+					for( ParsedPeptideModification mod : peptide.getMods() ) {
+						Modification xmlModification = new Modification();
+						xmlModifications.getModification().add( xmlModification );
+						
+						xmlModification.setMass( NumberUtils.getRoundedBigDecimal( mod.getMass() ) );
+						xmlModification.setPosition( new BigInteger( String.valueOf( mod.getPosition() ) ) );
+					}
+				}
+				
+				// add in the linked position in this peptide
+				LinkedPositions xmlLinkedPositions = new LinkedPositions();
+				xmlPeptide.setLinkedPositions( xmlLinkedPositions );
+				
+				LinkedPosition xmlLinkedPosition = new LinkedPosition();
+				xmlLinkedPositions.getLinkedPosition().add( xmlLinkedPosition );				
+				xmlLinkedPosition.setPosition( new BigInteger( String.valueOf( peptide.getLinkedPosition() ) ) );
+			}
+			
+			// add in the PSMs and annotations
+			Psms xmlPsms = new Psms();
+			xmlReportedPeptide.setPsms( xmlPsms );
+			
+			// iterate over all PSMs
+			for( Result result : reportedPeptidesAndResults.get( reportedPeptideString ).getResults() ) {
+				Psm xmlPsm = new Psm();
+				xmlPsms.getPsm().add( xmlPsm );
+				
+				if( scanFilename != null && scanFilename != "" )
+					xmlPsm.setScanFileName( scanFilename );
+				
+				xmlPsm.setScanNumber( new BigInteger( String.valueOf( result.getScanNumber() ) ) );
+				xmlPsm.setPrecursorCharge( new BigInteger( String.valueOf( result.getCharge() ) ) );
+				xmlPsm.setLinkerMass( NumberUtils.getRoundedBigDecimal( result.getLinker().getMass( analysis.getAnalysisProperties() ) ) );
+				
+				// add in the filterable PSM annotations (e.g., score)
+				FilterablePsmAnnotations xmlFilterablePsmAnnotations = new FilterablePsmAnnotations();
+				xmlPsm.setFilterablePsmAnnotations( xmlFilterablePsmAnnotations );
+				
+				// stavrox has 1 filterable psm annotation: score
+				FilterablePsmAnnotation xmlFilterablePsmAnnotation = new FilterablePsmAnnotation();
+				xmlFilterablePsmAnnotations.getFilterablePsmAnnotation().add( xmlFilterablePsmAnnotation );
+				
+				xmlFilterablePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_SCORE );
+				xmlFilterablePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+				xmlFilterablePsmAnnotation.setValue( new BigDecimal( result.getScore() ) );				
+				
+				// add in the non-filterable descriptive annotations (e.g., calculated mass)
+				DescriptivePsmAnnotations xmlDescriptivePsmAnnotations = new DescriptivePsmAnnotations();
+				xmlPsm.setDescriptivePsmAnnotations( xmlDescriptivePsmAnnotations );
+
+				{
+					// handle m/z
+					DescriptivePsmAnnotation xmlDescriptivePsmAnnotation = new DescriptivePsmAnnotation();
+					xmlDescriptivePsmAnnotations.getDescriptivePsmAnnotation().add( xmlDescriptivePsmAnnotation );
+					
+					xmlDescriptivePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_MOVERZ );
+					xmlDescriptivePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					
+					// try to limit this value to the chosen number of decimal places
+					try {
+						xmlDescriptivePsmAnnotation.setValue( NumberUtils.getRoundedBigDecimal( Double.valueOf( result.getMoverz() ) ).toString() );
+					} catch( Exception e ) {
+						xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getMoverz() ) );
+					}
+				}
+				
+				{
+					// handle observed mass
+					DescriptivePsmAnnotation xmlDescriptivePsmAnnotation = new DescriptivePsmAnnotation();
+					xmlDescriptivePsmAnnotations.getDescriptivePsmAnnotation().add( xmlDescriptivePsmAnnotation );
+					
+					xmlDescriptivePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_OBSERVED_MASS );
+					xmlDescriptivePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					
+					// try to limit this value to the chosen number of decimal places
+					try {
+						xmlDescriptivePsmAnnotation.setValue( NumberUtils.getRoundedBigDecimal( Double.valueOf( result.getObservedMass() ) ).toString() );
+					} catch( Exception e ) {
+						xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getObservedMass() ) );
+					}
+					
+				}
+				
+				{
+					// handle candidate mass
+					DescriptivePsmAnnotation xmlDescriptivePsmAnnotation = new DescriptivePsmAnnotation();
+					xmlDescriptivePsmAnnotations.getDescriptivePsmAnnotation().add( xmlDescriptivePsmAnnotation );
+					
+					xmlDescriptivePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_CANDIDATE_MASS );
+					xmlDescriptivePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					
+					// try to limit this value to the chosen number of decimal places
+					try {
+						xmlDescriptivePsmAnnotation.setValue( NumberUtils.getRoundedBigDecimal( Double.valueOf( result.getCandidateMass() ) ).toString() );
+					} catch( Exception e ) {
+						xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getCandidateMass() ) );
+					}
+									}
+				
+				{
+					// handle mass deviation
+					DescriptivePsmAnnotation xmlDescriptivePsmAnnotation = new DescriptivePsmAnnotation();
+					xmlDescriptivePsmAnnotations.getDescriptivePsmAnnotation().add( xmlDescriptivePsmAnnotation );
+					
+					xmlDescriptivePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_DEVIATION );
+					xmlDescriptivePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					
+					// try to limit this value to the chosen number of decimal places
+					try {
+						xmlDescriptivePsmAnnotation.setValue( NumberUtils.getRoundedBigDecimal( Double.valueOf( result.getDeviation() ) ).toString() );
+					} catch( Exception e ) {
+						xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getDeviation() ) );
+					}
+					
+				}
+				
+				
+			}
+			
+		}
+	
+		CreateImportFileFromJavaObjectsMain.getInstance().createImportFileFromJavaObjectsMain(outputFile, proxlInputRoot);
 		
 	}
 	

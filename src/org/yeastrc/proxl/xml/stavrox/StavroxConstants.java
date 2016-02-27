@@ -12,5 +12,4 @@ public class StavroxConstants {
 	public static final String FILTER_DIRECTION_ABOVE = "above";
 	public static final String FILTER_DIRECTION_BELOW = "below";
 	
-	
 }

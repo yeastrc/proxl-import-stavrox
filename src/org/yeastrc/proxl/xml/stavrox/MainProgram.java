@@ -2,7 +2,6 @@ package org.yeastrc.proxl.xml.stavrox;
 
 import java.io.File;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yeastrc.proxl.xml.stavrox.linker.LinkerMapper;
 import org.yeastrc.proxl.xml.stavrox.linker.LinkerUtils;
 import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
@@ -15,7 +14,7 @@ import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
 public class MainProgram {
 
 	
-	private void convertData( String filename, String linkerName ) throws Exception {
+	private void convertData( String filename, String linkerName, String fastaFilename, String scanFilename, String outputFilename ) throws Exception {
 		
 		File file = new File( filename );
 		StavroxAnalysisLoader loader = new StavroxAnalysisLoader();
@@ -29,21 +28,29 @@ public class MainProgram {
 			throw new Exception( message );
 		}
 		
+		/*
 		// test print out the all linkers and calculated masses from properties file
 		for( StavroxCrosslinker linker : analysis.getAnalysisProperties().getCrosslinkers() ) {
 			System.out.println( linker.getName() + " : " + linker.getFormula() + " : calculated mass: " + LinkerUtils.calculateLinkerMass( linker, analysis.getAnalysisProperties() ) );
 		}
+		*/
+		
+		XMLBuilder builder = new XMLBuilder();
+		builder.buildAndSaveXML(analysis, linkerName, fastaFilename, scanFilename, new File( outputFilename ) );
+		
 	}
 	
 	
 	public static void main(String[] args ) throws Exception {
 
 		String resultsFilename = args[ 0 ];
-		String linkerName = args[ 1 ];
-		
+		String fastaFilename = args[ 1 ];
+		String linkerName = args[ 2 ];
+		String scanFilename = args[ 3 ];
+		String outputFilename = args[ 4 ];
 		
 		MainProgram mp = new MainProgram();
-		mp.convertData( resultsFilename, linkerName );
+		mp.convertData( resultsFilename, linkerName, fastaFilename, scanFilename, outputFilename );
 		
 		
 		

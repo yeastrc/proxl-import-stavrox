@@ -27,7 +27,7 @@ public class LinkerMapper {
 		if( linkerMap.containsKey( proxlAbbr ) )
 			return linkerMap.get( proxlAbbr );
 		
-		throw new Exception( "Unsupported linker name." );
+		throw new Exception( "Unsupported linker name: " + proxlAbbr );
 		
 	}
 }
