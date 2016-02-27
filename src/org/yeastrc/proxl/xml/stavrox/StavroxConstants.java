@@ -12,4 +12,8 @@ public class StavroxConstants {
 	public static final String FILTER_DIRECTION_ABOVE = "above";
 	public static final String FILTER_DIRECTION_BELOW = "below";
 	
+	public static final int PSM_TYPE_MONOLINK = 0;
+	public static final int PSM_TYPE_LOOPLINK = 1;
+	public static final int PSM_TYPE_CROSSLINK = 2;
+	
 }

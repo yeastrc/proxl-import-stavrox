@@ -48,9 +48,17 @@ public class ParsedReportedPeptide {
 	public void setResults(Collection<Result> results) {
 		this.results = results;
 	}
-	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+
+
 	private String reportedPeptideString;
 	private Collection<ParsedPeptide> peptides;
 	private Collection<Result> results;
+	private int type;
 	
 }

@@ -18,7 +18,25 @@ public class Result {
 	 * @return
 	 */
 	public String getReportedPeptideString() {
-		return this.getPeptide1() + "(" + this.getPosition1String() + ")--" + this.getPeptide2() + "(" + this.getPosition2String() + ")";
+		if( this.getPsmType() == StavroxConstants.PSM_TYPE_CROSSLINK )
+			return this.getPeptide1() + "(" + this.getPosition1String() + ")--" + this.getPeptide2() + "(" + this.getPosition2String() + ")";
+		
+		if( this.getPsmType() == StavroxConstants.PSM_TYPE_LOOPLINK )
+			return this.getPeptide1() + "(" + this.getPosition1String() + "," + this.getPosition2String() + ")";
+		
+		return this.getPeptide1() + "(" + this.getPosition1String() + ")";
+	}
+	
+	/**
+	 * Get the type (crosslink, looplink, or monolink) for this psm. Looked up in
+	 * StavroxConstants
+	 * @return
+	 */
+	public int getPsmType() {
+		if( this.getPeptide2().equals( "0" ) ) return StavroxConstants.PSM_TYPE_MONOLINK;
+		if( this.getPeptide2().equals( "1" ) ) return StavroxConstants.PSM_TYPE_LOOPLINK;
+		
+		return StavroxConstants.PSM_TYPE_CROSSLINK;
 	}
 	
 	@Override

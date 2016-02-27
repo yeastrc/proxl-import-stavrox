@@ -1,7 +1,6 @@
 package org.yeastrc.proxl.xml.stavrox;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +31,7 @@ public class ParsedReportedPeptideUtils {
 					
 					reportedPeptide.setResults( new ArrayList<Result>() );
 					reportedPeptide.setReportedPeptideString( reportedPeptideString );
+					reportedPeptide.setType( result.getPsmType() );
 					
 					// associated the parsed peptides with this reported peptide
 					reportedPeptide.setPeptides( ParsedPeptideUtils.getParsePeptides( result, analysis.getAnalysisProperties() ) );					

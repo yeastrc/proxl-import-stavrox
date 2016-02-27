@@ -82,6 +82,8 @@ public class XMLBuilder {
 		// Define which annotation types are visible by default
 		//
 		DefaultVisibleAnnotations xmlDefaultVisibleAnnotations = new DefaultVisibleAnnotations();
+		searchProgramInfo.setDefaultVisibleAnnotations( xmlDefaultVisibleAnnotations );
+		
 		VisiblePsmAnnotations xmlVisiblePsmAnnotations = new VisiblePsmAnnotations();
 		xmlDefaultVisibleAnnotations.setVisiblePsmAnnotations( xmlVisiblePsmAnnotations );
 
@@ -144,7 +146,13 @@ public class XMLBuilder {
 			reportedPeptides.getReportedPeptide().add( xmlReportedPeptide );
 			
 			xmlReportedPeptide.setReportedPeptideString( reportedPeptideString );
-			xmlReportedPeptide.setType( LinkType.CROSSLINK );
+			
+			if( reportedPeptidesAndResults.get( reportedPeptideString ).getType() == StavroxConstants.PSM_TYPE_CROSSLINK )
+				xmlReportedPeptide.setType( LinkType.CROSSLINK );
+			else if( reportedPeptidesAndResults.get( reportedPeptideString ).getType() == StavroxConstants.PSM_TYPE_LOOPLINK )
+				xmlReportedPeptide.setType( LinkType.LOOPLINK );
+			else
+				xmlReportedPeptide.setType( LinkType.UNLINKED );	// monolinked peptide with no cross- or loop-link are considered unlinked (monolinks are considered mods)
 			
 			Peptides xmlPeptides = new Peptides();
 			xmlReportedPeptide.setPeptides( xmlPeptides );
@@ -167,16 +175,26 @@ public class XMLBuilder {
 						
 						xmlModification.setMass( NumberUtils.getRoundedBigDecimal( mod.getMass() ) );
 						xmlModification.setPosition( new BigInteger( String.valueOf( mod.getPosition() ) ) );
+						xmlModification.setIsMonolink( mod.isMonolink() );
 					}
 				}
 				
 				// add in the linked position in this peptide
-				LinkedPositions xmlLinkedPositions = new LinkedPositions();
-				xmlPeptide.setLinkedPositions( xmlLinkedPositions );
-				
-				LinkedPosition xmlLinkedPosition = new LinkedPosition();
-				xmlLinkedPositions.getLinkedPosition().add( xmlLinkedPosition );				
-				xmlLinkedPosition.setPosition( new BigInteger( String.valueOf( peptide.getLinkedPosition() ) ) );
+				if( reportedPeptidesAndResults.get( reportedPeptideString ).getType() != StavroxConstants.PSM_TYPE_MONOLINK ) {	// monolinks have no linked positions, they're mods
+					LinkedPositions xmlLinkedPositions = new LinkedPositions();
+					xmlPeptide.setLinkedPositions( xmlLinkedPositions );
+					
+					LinkedPosition xmlLinkedPosition = new LinkedPosition();
+					xmlLinkedPositions.getLinkedPosition().add( xmlLinkedPosition );
+					xmlLinkedPosition.setPosition( new BigInteger( String.valueOf( peptide.getLinkedPosition1() ) ) );
+
+					// looplinked PSMs are linked in two places in the same peptide
+					if( reportedPeptidesAndResults.get( reportedPeptideString ).getType() == StavroxConstants.PSM_TYPE_LOOPLINK ) {
+						xmlLinkedPosition = new LinkedPosition();
+						xmlLinkedPositions.getLinkedPosition().add( xmlLinkedPosition );
+						xmlLinkedPosition.setPosition( new BigInteger( String.valueOf( peptide.getLinkedPosition2() ) ) );
+					}
+				}
 			}
 			
 			// add in the PSMs and annotations
@@ -193,7 +211,9 @@ public class XMLBuilder {
 				
 				xmlPsm.setScanNumber( new BigInteger( String.valueOf( result.getScanNumber() ) ) );
 				xmlPsm.setPrecursorCharge( new BigInteger( String.valueOf( result.getCharge() ) ) );
-				xmlPsm.setLinkerMass( NumberUtils.getRoundedBigDecimal( result.getLinker().getMass( analysis.getAnalysisProperties() ) ) );
+				
+				if( result.getPsmType() != StavroxConstants.PSM_TYPE_MONOLINK )
+					xmlPsm.setLinkerMass( NumberUtils.getRoundedBigDecimal( result.getLinker().getMass( analysis.getAnalysisProperties() ) ) );
 				
 				// add in the filterable PSM annotations (e.g., score)
 				FilterablePsmAnnotations xmlFilterablePsmAnnotations = new FilterablePsmAnnotations();

@@ -20,7 +20,14 @@ public class ParsedPeptideModification {
 	public void setMass(double mass) {
 		this.mass = mass;
 	}
-	
+	public boolean isMonolink() {
+		return monolink;
+	}
+	public void setMonolink(boolean monolink) {
+		this.monolink = monolink;
+	}
+
 	private int position;
 	private double mass;
+	private boolean monolink = false;
 }

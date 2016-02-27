@@ -23,17 +23,24 @@ public class ParsedPeptide {
 	public void setMods(Collection<ParsedPeptideModification> mods) {
 		this.mods = mods;
 	}
-	public Integer getLinkedPosition() {
-		return linkedPosition;
+	public Integer getLinkedPosition1() {
+		return linkedPosition1;
 	}
-	public void setLinkedPosition(Integer linkedPosition) {
-		this.linkedPosition = linkedPosition;
+	public void setLinkedPosition1(Integer linkedPosition1) {
+		this.linkedPosition1 = linkedPosition1;
+	}
+	public Integer getLinkedPosition2() {
+		return linkedPosition2;
+	}
+	public void setLinkedPosition2(Integer linkedPosition2) {
+		this.linkedPosition2 = linkedPosition2;
 	}
 
 
 
 	private String sequence;
 	private Collection<ParsedPeptideModification> mods;
-	private Integer linkedPosition;
+	private Integer linkedPosition1;
+	private Integer linkedPosition2;
 	
 }

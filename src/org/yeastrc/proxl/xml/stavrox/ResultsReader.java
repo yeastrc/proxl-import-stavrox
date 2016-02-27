@@ -52,7 +52,7 @@ public class ResultsReader {
 				result.setPeptide2( fields[ 10 ] );
 				
 				// skip dead-ends (monolinks) and nulls (looplinks) for now
-				if( result.getPeptide2().equals( "0" ) || result.getPeptide2().equals( "1" ) ) continue;
+				//if( result.getPeptide2().equals( "0" ) || result.getPeptide2().equals( "1" ) ) continue;
 				
 				result.setScanNumber( Integer.parseInt( fields [ 14 ] ) );
 				
@@ -71,20 +71,29 @@ public class ResultsReader {
 				 * because we do not know if stavrox is consistent about order of peptides in
 				 * identified peptide pairs
 				 * we will ensure peptide1 is alphabetically less than peptide 2 */
-				if( result.getPeptide1().compareTo( result.getPeptide2() ) > 0 ) {
-					
-					// need to swap them
-					String tmpPeptide = result.getPeptide1();
-					String tmpPosition = result.getPosition1String();
-					
-					result.setPeptide1( result.getPeptide2() );
-					result.setPosition1String( result.getPosition2String() );
-					
-					result.setPeptide2( tmpPeptide );
-					result.setPosition2String( tmpPosition );
-				} else if( result.getPeptide1().equals( result.getPeptide2() ) ) {
-					
-					// same peptide sequences, ensure position strings are alphabetized
+				if( result.getPsmType() == StavroxConstants.PSM_TYPE_CROSSLINK ) {
+					if( result.getPeptide1().compareTo( result.getPeptide2() ) > 0 ) {
+						
+						// need to swap them
+						String tmpPeptide = result.getPeptide1();
+						String tmpPosition = result.getPosition1String();
+						
+						result.setPeptide1( result.getPeptide2() );
+						result.setPosition1String( result.getPosition2String() );
+						
+						result.setPeptide2( tmpPeptide );
+						result.setPosition2String( tmpPosition );
+					} else if( result.getPeptide1().equals( result.getPeptide2() ) ) {
+						
+						// same peptide sequences, ensure position strings are alphabetized
+						if( result.getPosition1String().compareTo( result.getPosition2String() ) > 0 ) {
+							String tmpPosition = result.getPosition1String();
+							
+							result.setPosition1String( result.getPosition2String() );
+							result.setPosition2String( tmpPosition );
+						}
+					}
+				} else if( result.getPsmType() == StavroxConstants.PSM_TYPE_LOOPLINK ) {
 					if( result.getPosition1String().compareTo( result.getPosition2String() ) > 0 ) {
 						String tmpPosition = result.getPosition1String();
 						
