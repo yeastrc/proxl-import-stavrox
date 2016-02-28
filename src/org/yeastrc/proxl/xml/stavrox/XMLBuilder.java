@@ -8,6 +8,8 @@ import java.util.Map;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMass;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMasses;
+import org.yeastrc.proxl_import.api.xml_dto.DecoyLabel;
+import org.yeastrc.proxl_import.api.xml_dto.DecoyLabels;
 import org.yeastrc.proxl_import.api.xml_dto.DefaultVisibleAnnotations;
 import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotation;
 import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotationTypes;
@@ -131,6 +133,27 @@ public class XMLBuilder {
 			smods.getStaticModification().add( xmlSmod );
 		}
 
+		
+		
+		//
+		// Add decoy labels (optional)
+		//
+		DecoyLabels xmlDecoyLabels = new DecoyLabels();
+		proxlInputRoot.setDecoyLabels( xmlDecoyLabels );
+		
+		{
+			DecoyLabel xmlDecoyLabel = new DecoyLabel();
+			xmlDecoyLabels.getDecoyLabel().add( xmlDecoyLabel );
+			
+			xmlDecoyLabel.setPrefix( "random_seq" );
+		}
+		
+		{
+			DecoyLabel xmlDecoyLabel = new DecoyLabel();
+			xmlDecoyLabels.getDecoyLabel().add( xmlDecoyLabel );
+			
+			xmlDecoyLabel.setPrefix( "random_seq" );
+		}
 		
 		
 		//
