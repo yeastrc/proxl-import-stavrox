@@ -14,8 +14,6 @@ public class ParsedPeptideUtils {
 	 * @throws Exception
 	 */
 	public static Collection<ParsedPeptide> getParsePeptides( Result result, AnalysisProperties properties ) throws Exception {
-
-		System.out.println( "Parsing: " + result );
 		
 		Collection<ParsedPeptide> parsedPeptides = new ArrayList<ParsedPeptide>();
 		

@@ -61,6 +61,7 @@ public class XMLBuilder {
 		
 		searchProgram.setName( StavroxConstants.SEARCH_PROGRAM_NAME );
 		searchProgram.setVersion( StavroxConstants.SEARCH_PROGRAM_VERSION );
+		searchProgram.setDisplayName( StavroxConstants.SEARCH_PROGRAM_NAME );
 		
 		
 		//
