@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox.linker;
+package org.yeastrc.proxl.xml.stavrox.utils;
 
 import java.util.HashMap;
 import java.util.Map;

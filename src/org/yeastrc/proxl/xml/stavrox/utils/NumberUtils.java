@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

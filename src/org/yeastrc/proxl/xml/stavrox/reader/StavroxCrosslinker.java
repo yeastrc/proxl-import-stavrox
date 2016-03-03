@@ -1,9 +1,9 @@
-package org.yeastrc.proxl.xml.stavrox.linker;
+package org.yeastrc.proxl.xml.stavrox.reader;
 
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.yeastrc.proxl.xml.stavrox.AnalysisProperties;
+import org.yeastrc.proxl.xml.stavrox.utils.LinkerUtils;
 
 public class StavroxCrosslinker {
 

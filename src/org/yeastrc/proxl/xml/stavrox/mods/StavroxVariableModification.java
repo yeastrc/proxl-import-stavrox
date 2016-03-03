@@ -1,8 +1,8 @@
 package org.yeastrc.proxl.xml.stavrox.mods;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.yeastrc.proxl.xml.stavrox.AnalysisProperties;
-import org.yeastrc.proxl.xml.stavrox.MassUtils;
+import org.yeastrc.proxl.xml.stavrox.reader.AnalysisProperties;
+import org.yeastrc.proxl.xml.stavrox.utils.MassUtils;
 
 public class StavroxVariableModification implements IStavroxModification {
 	

@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.parsed;
 
 /**
  * Represents a position and a mass modification, to be associated as

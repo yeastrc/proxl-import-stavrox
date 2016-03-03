@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.reader;
 
 import java.io.File;
 import java.io.InputStream;
@@ -8,6 +8,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 
 /**
  * Interact with the zipped StavroX analysis file to load the data

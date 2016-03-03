@@ -1,11 +1,19 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.builder;
 
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
 
+import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
+import org.yeastrc.proxl.xml.stavrox.parsed.ParsedPeptide;
+import org.yeastrc.proxl.xml.stavrox.parsed.ParsedPeptideModification;
+import org.yeastrc.proxl.xml.stavrox.parsed.ParsedReportedPeptide;
+import org.yeastrc.proxl.xml.stavrox.parsed.ParsedReportedPeptideUtils;
+import org.yeastrc.proxl.xml.stavrox.reader.Result;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
+import org.yeastrc.proxl.xml.stavrox.utils.NumberUtils;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMass;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMasses;
 import org.yeastrc.proxl_import.api.xml_dto.DecoyLabel;

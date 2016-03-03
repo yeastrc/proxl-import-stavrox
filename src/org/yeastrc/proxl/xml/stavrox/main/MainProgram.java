@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.main;
 
 import jargs.gnu.CmdLineParser;
 import jargs.gnu.CmdLineParser.IllegalOptionValueException;
@@ -6,8 +6,11 @@ import jargs.gnu.CmdLineParser.UnknownOptionException;
 
 import java.io.File;
 
-import org.yeastrc.proxl.xml.stavrox.linker.LinkerConstants;
-import org.yeastrc.proxl.xml.stavrox.linker.LinkerMapper;
+import org.yeastrc.proxl.xml.stavrox.builder.XMLBuilder;
+import org.yeastrc.proxl.xml.stavrox.constants.LinkerConstants;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysisLoader;
+import org.yeastrc.proxl.xml.stavrox.utils.LinkerMapper;
 
 /**
  * Convert a StavroX data file to a ProXL XML file

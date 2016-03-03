@@ -1,7 +1,7 @@
-package org.yeastrc.proxl.xml.stavrox.linker;
+package org.yeastrc.proxl.xml.stavrox.utils;
 
-import org.yeastrc.proxl.xml.stavrox.AnalysisProperties;
-import org.yeastrc.proxl.xml.stavrox.MassUtils;
+import org.yeastrc.proxl.xml.stavrox.reader.AnalysisProperties;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxCrosslinker;
 
 public class LinkerUtils {
 

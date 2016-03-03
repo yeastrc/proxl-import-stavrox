@@ -1,8 +1,11 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.parsed;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.yeastrc.proxl.xml.stavrox.reader.Result;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
 
 public class ParsedReportedPeptideUtils {
 

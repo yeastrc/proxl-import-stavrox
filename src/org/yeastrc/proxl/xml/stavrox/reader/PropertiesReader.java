@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.reader;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxVariableModification;
 

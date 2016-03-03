@@ -1,6 +1,6 @@
 package org.yeastrc.proxl.xml.stavrox.mods;
 
-import org.yeastrc.proxl.xml.stavrox.AnalysisProperties;
+import org.yeastrc.proxl.xml.stavrox.reader.AnalysisProperties;
 
 public interface IStavroxModification {
 

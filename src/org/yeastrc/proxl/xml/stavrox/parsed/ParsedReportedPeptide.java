@@ -1,6 +1,8 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.parsed;
 
 import java.util.Collection;
+
+import org.yeastrc.proxl.xml.stavrox.reader.Result;
 
 /**
  * In proxl, a "reported peptide" is essentially the string that uniquely identifies

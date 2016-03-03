@@ -1,10 +1,12 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.yeastrc.proxl.xml.stavrox.mods.IStavroxModification;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
+import org.yeastrc.proxl.xml.stavrox.reader.AnalysisProperties;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxAminoAcid;
 
 public class MassUtils {
 

@@ -1,8 +1,9 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.builder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 import org.yeastrc.proxl_import.api.xml_dto.SearchAnnotation;
 
 public class PSMDefaultVisibleAnnotationTypes {

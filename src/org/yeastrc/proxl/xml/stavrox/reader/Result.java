@@ -1,7 +1,7 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.reader;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
+import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 
 /**
  * A line from the Results.csv file in the zipped stavrox results file.

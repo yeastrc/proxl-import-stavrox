@@ -1,11 +1,10 @@
-package org.yeastrc.proxl.xml.stavrox;
+package org.yeastrc.proxl.xml.stavrox.reader;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.yeastrc.proxl.xml.stavrox.linker.StavroxCrosslinker;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxVariableModification;
 
