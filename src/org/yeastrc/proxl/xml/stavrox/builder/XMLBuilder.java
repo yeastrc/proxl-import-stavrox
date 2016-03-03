@@ -330,6 +330,18 @@ public class XMLBuilder {
 					}
 					
 				}
+
+				{
+					// handle scan number
+					DescriptivePsmAnnotation xmlDescriptivePsmAnnotation = new DescriptivePsmAnnotation();
+					xmlDescriptivePsmAnnotations.getDescriptivePsmAnnotation().add( xmlDescriptivePsmAnnotation );
+					
+					xmlDescriptivePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_SCAN_NUMBER );
+					xmlDescriptivePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					
+					// try to limit this value to the chosen number of decimal places
+					xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getScanNumber() ) );
+				}
 				
 				
 			}

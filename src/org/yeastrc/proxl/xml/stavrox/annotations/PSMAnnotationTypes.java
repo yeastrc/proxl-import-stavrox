@@ -15,6 +15,7 @@ public class PSMAnnotationTypes {
 	public static final String ANNOTATION_TYPE_OBSERVED_MASS = "obs. mass";
 	public static final String ANNOTATION_TYPE_CANDIDATE_MASS = "cand. mass";
 	public static final String ANNOTATION_TYPE_DEVIATION = "deviation";
+	public static final String ANNOTATION_TYPE_SCAN_NUMBER = "scan num.";
 	
 	/**
 	 * Get the list of filterable PSM annotation types in StavroX data
@@ -69,6 +70,14 @@ public class PSMAnnotationTypes {
 		{
 			DescriptivePsmAnnotationType type = new DescriptivePsmAnnotationType();
 			type.setName( ANNOTATION_TYPE_DEVIATION );
+			type.setDescription( type.getName() );
+			
+			types.add( type );
+		}
+		
+		{
+			DescriptivePsmAnnotationType type = new DescriptivePsmAnnotationType();
+			type.setName( ANNOTATION_TYPE_SCAN_NUMBER );
 			type.setDescription( type.getName() );
 			
 			types.add( type );

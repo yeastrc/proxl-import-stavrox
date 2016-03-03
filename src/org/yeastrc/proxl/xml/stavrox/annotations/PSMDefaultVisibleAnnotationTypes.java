@@ -17,6 +17,13 @@ public class PSMDefaultVisibleAnnotationTypes {
 		
 		{
 			SearchAnnotation annotation = new SearchAnnotation();
+			annotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_SCAN_NUMBER );
+			annotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+			annotations.add( annotation );
+		}
+		
+		{
+			SearchAnnotation annotation = new SearchAnnotation();
 			annotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_SCORE );
 			annotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
 			annotations.add( annotation );
