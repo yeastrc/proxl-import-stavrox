@@ -1,4 +1,4 @@
-package org.yeastrc.proxl.xml.stavrox.builder;
+package org.yeastrc.proxl.xml.stavrox.annotations;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

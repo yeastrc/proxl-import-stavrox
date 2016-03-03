@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Map;
 
+import org.yeastrc.proxl.xml.stavrox.annotations.PSMAnnotationTypes;
+import org.yeastrc.proxl.xml.stavrox.annotations.PSMDefaultVisibleAnnotationTypes;
 import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
 import org.yeastrc.proxl.xml.stavrox.parsed.ParsedPeptide;
