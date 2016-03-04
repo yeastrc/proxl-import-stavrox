@@ -274,6 +274,15 @@ public class XMLBuilder {
 					xmlFilterablePsmAnnotation.setValue( new BigDecimal( result.getRank() ) );				
 				}
 				
+				// handle FDR
+				{
+					FilterablePsmAnnotation xmlFilterablePsmAnnotation = new FilterablePsmAnnotation();
+					xmlFilterablePsmAnnotations.getFilterablePsmAnnotation().add( xmlFilterablePsmAnnotation );
+					
+					xmlFilterablePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_FDR );
+					xmlFilterablePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					xmlFilterablePsmAnnotation.setValue( NumberUtils.getRoundedBigDecimal( analysis.getDecoyHandler().getFDR( result.getScore() ) ) );				
+				}
 				
 				
 				// add in the non-filterable descriptive annotations (e.g., calculated mass)

@@ -49,18 +49,17 @@ public class StavroxAnalysisLoader {
 			
 			sa.setAnalysisResults( analysisResults );
 			
-			/*
-			System.out.println( "Loaded: " + sa.getAnalysisResults().keySet().size() + " scans." );			
-
-
-			for( Integer scan : analysisResults.keySet() ) {
-				System.out.println( scan );
-				for( Result r : analysisResults.get( scan ) ) {
-					System.out.println( r );
-				}
-			}
-			*/
-			
+			// load the decoy data
+			zipEntry = zipFile.getEntry( StavroxConstants.DECOY_FILENAME );
+			if( zipEntry != null ) {
+				is = zipFile.getInputStream( zipEntry );
+				DecoyHandler handler = new DecoyHandler();
+				handler.readDecoys( is );
+				
+				sa.setDecoyHandler( handler );
+			} else {
+				throw new Exception( "Decoy file was not found." );
+			}	
 
 			
 		} finally {

@@ -41,9 +41,16 @@ public class StavroxAnalysis {
 	public void setAnalysisResults(List<Result> analysisResults) {
 		this.analysisResults = analysisResults;
 	}
+	
+	public DecoyHandler getDecoyHandler() {
+		return decoyHandler;
+	}
 
-
+	public void setDecoyHandler(DecoyHandler decoyHandler) {
+		this.decoyHandler = decoyHandler;
+	}
 
 	private AnalysisProperties analysisProperties;
 	private List<Result> analysisResults;
+	private DecoyHandler decoyHandler;
 }

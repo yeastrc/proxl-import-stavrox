@@ -17,6 +17,7 @@ public class PSMAnnotationTypes {
 	public static final String ANNOTATION_TYPE_DEVIATION = "deviation";
 	public static final String ANNOTATION_TYPE_SCAN_NUMBER = "scan num.";
 	public static final String ANNOTATION_TYPE_RANK = "rank";
+	public static final String ANNOTATION_TYPE_FDR = "FDR";
 	
 	/**
 	 * Get the list of filterable PSM annotation types in StavroX data
@@ -29,13 +30,24 @@ public class PSMAnnotationTypes {
 			FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
 			type.setName( ANNOTATION_TYPE_SCORE );
 			type.setDescription( "StavroX Score" );
-			type.setDefaultFilterValue( new BigDecimal( "30" ) );
-			type.setDefaultFilter( true );
+			type.setDefaultFilterValue( new BigDecimal( "50" ) );
+			type.setDefaultFilter( false );
 			type.setFilterDirection( FilterDirectionType.ABOVE );
 			
 			types.add( type );
 		}
 
+		{
+			FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
+			type.setName( ANNOTATION_TYPE_FDR );
+			type.setDescription( "False discovery rate associated with this PSM's score" );
+			type.setDefaultFilterValue( new BigDecimal( "0.01" ) );
+			type.setDefaultFilter( true );
+			type.setFilterDirection( FilterDirectionType.BELOW );
+			
+			types.add( type );
+		}
+		
 		{
 			FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
 			type.setName( ANNOTATION_TYPE_RANK );

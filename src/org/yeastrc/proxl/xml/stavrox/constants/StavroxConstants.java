@@ -4,6 +4,7 @@ public class StavroxConstants {
 
 	public static final String PROPERTIES_FILENAME = "properties.ssf";
 	public static final String PSM_ANNOTATIONS_FILENAME = "Result.csv";
+	public static final String DECOY_FILENAME = "decoyBase.csv";
 
 	
 	public static final String SEARCH_PROGRAM_NAME = "StavroX";
