@@ -57,7 +57,7 @@ import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.Create
  */
 public class XMLBuilder {
 
-	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilename, String scanFilename, File outputFile ) throws Exception {
+	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
 		
 		ProxlInput proxlInputRoot = new ProxlInput();
 		proxlInputRoot.setFastaFilename( fastaFilename );
@@ -243,7 +243,7 @@ public class XMLBuilder {
 				if( scanFilename != null && scanFilename != "" )
 					xmlPsm.setScanFileName( scanFilename );
 				
-				xmlPsm.setScanNumber( new BigInteger( String.valueOf( result.getScanNumber() ) ) );
+				xmlPsm.setScanNumber( new BigInteger( String.valueOf( result.getScanNumber() + scanNumberAdjustment ) ) );
 				xmlPsm.setPrecursorCharge( new BigInteger( String.valueOf( result.getCharge() ) ) );
 				
 				if( result.getPsmType() != StavroxConstants.PSM_TYPE_MONOLINK )
@@ -355,7 +355,7 @@ public class XMLBuilder {
 					xmlDescriptivePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
 					
 					// try to limit this value to the chosen number of decimal places
-					xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getScanNumber() ) );
+					xmlDescriptivePsmAnnotation.setValue( String.valueOf( result.getScanNumber() + scanNumberAdjustment ) );
 				}
 				
 				
