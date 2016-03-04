@@ -253,13 +253,28 @@ public class XMLBuilder {
 				FilterablePsmAnnotations xmlFilterablePsmAnnotations = new FilterablePsmAnnotations();
 				xmlPsm.setFilterablePsmAnnotations( xmlFilterablePsmAnnotations );
 				
-				// stavrox has 1 filterable psm annotation: score
-				FilterablePsmAnnotation xmlFilterablePsmAnnotation = new FilterablePsmAnnotation();
-				xmlFilterablePsmAnnotations.getFilterablePsmAnnotation().add( xmlFilterablePsmAnnotation );
+				// handle score
+				{
+					FilterablePsmAnnotation xmlFilterablePsmAnnotation = new FilterablePsmAnnotation();
+					xmlFilterablePsmAnnotations.getFilterablePsmAnnotation().add( xmlFilterablePsmAnnotation );
+					
+					xmlFilterablePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_SCORE );
+					xmlFilterablePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					xmlFilterablePsmAnnotation.setValue( new BigDecimal( result.getScore() ) );				
+				}
+
 				
-				xmlFilterablePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_SCORE );
-				xmlFilterablePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
-				xmlFilterablePsmAnnotation.setValue( new BigDecimal( result.getScore() ) );				
+				// handle rank
+				{
+					FilterablePsmAnnotation xmlFilterablePsmAnnotation = new FilterablePsmAnnotation();
+					xmlFilterablePsmAnnotations.getFilterablePsmAnnotation().add( xmlFilterablePsmAnnotation );
+					
+					xmlFilterablePsmAnnotation.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_RANK );
+					xmlFilterablePsmAnnotation.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+					xmlFilterablePsmAnnotation.setValue( new BigDecimal( result.getRank() ) );				
+				}
+				
+				
 				
 				// add in the non-filterable descriptive annotations (e.g., calculated mass)
 				DescriptivePsmAnnotations xmlDescriptivePsmAnnotations = new DescriptivePsmAnnotations();

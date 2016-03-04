@@ -1,7 +1,6 @@
 package org.yeastrc.proxl.xml.stavrox.reader;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -29,7 +28,7 @@ public class StavroxAnalysis {
 
 	
 	
-	public Map<Integer, List<Result>> getAnalysisResults() {
+	public List<Result> getAnalysisResults() {
 		return analysisResults;
 	}
 
@@ -39,12 +38,12 @@ public class StavroxAnalysis {
 	 * If multiple results have the highest score, they will all be returned.
 	 * @param analysisResults
 	 */
-	public void setAnalysisResults(Map<Integer, List<Result>> analysisResults) {
+	public void setAnalysisResults(List<Result> analysisResults) {
 		this.analysisResults = analysisResults;
 	}
 
 
 
 	private AnalysisProperties analysisProperties;
-	private Map<Integer, List<Result>> analysisResults;
+	private List<Result> analysisResults;
 }

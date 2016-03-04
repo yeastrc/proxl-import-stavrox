@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +27,32 @@ public class ResultsReader {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<Integer, List<Result>> getAnalysisResults( InputStream is ) throws Exception {
+	public List<Result> getAnalysisResults( InputStream is ) throws Exception {
 		
-		Map<Integer, List<Result>> results = new HashMap<Integer, List<Result>>();
+		/**
+		 * This map maps scan numbers to a map of scores found for PSMs for that scan that are linked to the results with that score.
+		 * 
+		 * Scan Number => {
+		 * 					Score1 => {
+		 * 								Result1
+		 * 								Result2
+		 * 							 }
+		 * 					Score2 => {
+		 * 								Result3
+		 * 								Result4
+		 * 							 }
+		 * 
+		 * 				  }
+		 * 
+		 * Used to calculate ranks for those results, where the highest scoring result for a given scan
+		 * is given rank 1, second highest, rank 2 and so on. All results that have the same score are
+		 * given the same rank. Results with the next highest score are given a rank of the rank of
+		 * the results w/ the next best score + the number of results with that rank.
+		 * 
+		 * E.g., if 5 PSMs are tied for rank 1, any PSM with the next highest score would be rank 6.
+		 * 
+		 */
+		Map<Integer, Map<Integer, List<Result>>> results = new HashMap<Integer, Map<Integer, List<Result>>>();
 		
 		BufferedReader br = null;
 		try {
@@ -102,24 +126,17 @@ public class ResultsReader {
 					}
 				}
 				
-				if( !results.containsKey( result.getScanNumber() ) ) {
-					
-					// no results yet for this scan
-					results.put( result.getScanNumber(), new ArrayList<Result>() );
-					results.get( result.getScanNumber() ).add( result );
-				} else {
-					if( results.get( result.getScanNumber() ).get( 0 ).getScore() < result.getScore() ) {
-
-						// replace the existing array list with a new one containing only this result
-						results.put( result.getScanNumber(), new ArrayList<Result>() );
-						results.get( result.getScanNumber() ).add( result );
-						
-					} else if( results.get( result.getScanNumber() ).get( 0 ).getScore() == result.getScore() ) {
-						
-						// if the scores are equal, add this to the list
-						results.get( result.getScanNumber() ).add( result );
-					}
-				}				
+				Map<Integer, List<Result>> scoreMap = null;
+				if( !results.containsKey( result.getScanNumber() ) )
+					results.put( result.getScanNumber(), new HashMap<Integer, List<Result>>() );
+				
+				// a map of scores to a list of results that have that score (for this scan number)
+				scoreMap = results.get( result.getScanNumber() );
+				
+				if( !scoreMap.containsKey( result.getScore() ) )
+					scoreMap.put( result.getScore(), new ArrayList<Result>() );
+				
+				scoreMap.get( result.getScore() ).add( result );
 			}
 			
 		} finally {
@@ -127,8 +144,33 @@ public class ResultsReader {
 			catch( Throwable t ) { ; }
 		}
 		
+
+		// go over the list of lists, set ranks and create returned object
+		List<Result> returnedResults = new ArrayList<Result>();
 		
-		return results;
+		for( int scanNumber : results.keySet() ) {
+			
+			// get a descending, sorted list of scores
+			ArrayList<Integer> scores = new ArrayList<Integer>( results.get( scanNumber ).keySet() );			
+			Collections.sort( scores, Collections.reverseOrder() );
+			
+			int rank = 1;
+			for( int score : scores ) {
+				
+				for( Result result : results.get( scanNumber ).get( score ) ) {
+					
+					result.setRank( rank );
+					returnedResults.add( result );
+				}
+				
+				// increment the rank to use on the next iteration
+				rank += results.get( scanNumber ).get( score ).size();
+			}
+		}
+		
+		
+		
+		return returnedResults;
 		
 	}
 	

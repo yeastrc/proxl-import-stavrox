@@ -116,6 +116,13 @@ public class Result {
 	public void setPosition2String(String position2String) {
 		this.position2String = position2String;
 	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
 
 
 	private int score;
@@ -130,5 +137,6 @@ public class Result {
 	private String position1String;
 	private String position2String;
 	private StavroxCrosslinker linker;
+	private int rank;
 	
 }

@@ -20,28 +20,26 @@ public class ParsedReportedPeptideUtils {
 	public static Map<String, ParsedReportedPeptide> getParsedReportedPeptideFromResults( StavroxAnalysis analysis ) throws Exception {
 		Map<String, ParsedReportedPeptide> peptides = new HashMap<String, ParsedReportedPeptide>();
 		
-		for( int scanNumber : analysis.getAnalysisResults().keySet() ) {
-			for( Result result : analysis.getAnalysisResults().get( scanNumber ) ) {
+		for( Result result : analysis.getAnalysisResults() ) {
 				
-				String reportedPeptideString = result.getReportedPeptideString();
+			String reportedPeptideString = result.getReportedPeptideString();
 				
-				ParsedReportedPeptide reportedPeptide = null;
-				if( peptides.containsKey( reportedPeptideString ) ) {
-					reportedPeptide = peptides.get( reportedPeptideString );
-				} else {
-					reportedPeptide = new ParsedReportedPeptide();
-					peptides.put( reportedPeptideString, reportedPeptide );
+			ParsedReportedPeptide reportedPeptide = null;
+			if( peptides.containsKey( reportedPeptideString ) ) {
+				reportedPeptide = peptides.get( reportedPeptideString );
+			} else {
+				reportedPeptide = new ParsedReportedPeptide();
+				peptides.put( reportedPeptideString, reportedPeptide );
 					
-					reportedPeptide.setResults( new ArrayList<Result>() );
-					reportedPeptide.setReportedPeptideString( reportedPeptideString );
-					reportedPeptide.setType( result.getPsmType() );
+				reportedPeptide.setResults( new ArrayList<Result>() );
+				reportedPeptide.setReportedPeptideString( reportedPeptideString );
+				reportedPeptide.setType( result.getPsmType() );
 					
-					// associated the parsed peptides with this reported peptide
-					reportedPeptide.setPeptides( ParsedPeptideUtils.getParsePeptides( result, analysis.getAnalysisProperties() ) );					
-				}
-				
-				reportedPeptide.getResults().add( result );								
+				// associated the parsed peptides with this reported peptide
+				reportedPeptide.setPeptides( ParsedPeptideUtils.getParsePeptides( result, analysis.getAnalysisProperties() ) );					
 			}
+				
+			reportedPeptide.getResults().add( result );								
 		}
 				
 		return peptides;		

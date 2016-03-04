@@ -3,11 +3,9 @@ package org.yeastrc.proxl.xml.stavrox.reader;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 
 /**
@@ -47,7 +45,7 @@ public class StavroxAnalysisLoader {
 			is = zipFile.getInputStream( zipEntry );
 			
 			ResultsReader rr = new ResultsReader();
-			Map<Integer, List<Result>> analysisResults = rr.getAnalysisResults( is );
+			List<Result> analysisResults = rr.getAnalysisResults( is );
 			
 			sa.setAnalysisResults( analysisResults );
 			

@@ -16,6 +16,7 @@ public class PSMAnnotationTypes {
 	public static final String ANNOTATION_TYPE_CANDIDATE_MASS = "cand. mass";
 	public static final String ANNOTATION_TYPE_DEVIATION = "deviation";
 	public static final String ANNOTATION_TYPE_SCAN_NUMBER = "scan num.";
+	public static final String ANNOTATION_TYPE_RANK = "rank";
 	
 	/**
 	 * Get the list of filterable PSM annotation types in StavroX data
@@ -24,14 +25,27 @@ public class PSMAnnotationTypes {
 	public static List<FilterablePsmAnnotationType> getFilterablePsmAnnotationTypes() {
 		List<FilterablePsmAnnotationType> types = new ArrayList<FilterablePsmAnnotationType>();
 
-		FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
-		type.setName( ANNOTATION_TYPE_SCORE );
-		type.setDescription( "StavroX Score" );
-		type.setDefaultFilterValue( new BigDecimal( "50" ) );
-		type.setDefaultFilter( true );
-		type.setFilterDirection( FilterDirectionType.ABOVE );
-		
-		types.add( type );
+		{
+			FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
+			type.setName( ANNOTATION_TYPE_SCORE );
+			type.setDescription( "StavroX Score" );
+			type.setDefaultFilterValue( new BigDecimal( "30" ) );
+			type.setDefaultFilter( true );
+			type.setFilterDirection( FilterDirectionType.ABOVE );
+			
+			types.add( type );
+		}
+
+		{
+			FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
+			type.setName( ANNOTATION_TYPE_RANK );
+			type.setDescription( "Rank of PSM for scan" );
+			type.setDefaultFilterValue( new BigDecimal( "1" ) );
+			type.setDefaultFilter( true );
+			type.setFilterDirection( FilterDirectionType.BELOW );
+			
+			types.add( type );
+		}
 		
 		return types;
 	}
