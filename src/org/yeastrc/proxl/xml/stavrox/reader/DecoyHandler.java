@@ -72,8 +72,6 @@ public class DecoyHandler {
 			if( testScore < score ) break;
 			targetCount++;
 		}
-
-		System.out.println( "decoy: " + decoyCount + " target: " + targetCount );
 		
 		if( decoyCount == 0 ) return 0;
 				
