@@ -1,4 +1,4 @@
-pLink to ProXL XML Converter: Redistributed Libraries
+StavroX to ProXL XML Converter: Redistributed Libraries
 ========================================================
 
 Proxl makes use of and includes as part of its distribution 3rd party binary libraries.
