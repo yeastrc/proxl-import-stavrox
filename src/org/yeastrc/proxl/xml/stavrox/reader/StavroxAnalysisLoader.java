@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.io.IOUtils;
 import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 
 /**
@@ -35,9 +36,13 @@ public class StavroxAnalysisLoader {
 			
 			PropertiesReader pr = new PropertiesReader();
 			AnalysisProperties ap = pr.getAnalysisProperties( is );
+			is.close();
 			
 			sa.setAnalysisProperties( ap );
 
+			// save contents of properties file
+			is = zipFile.getInputStream( zipEntry );
+			sa.setPropertiesFileContents( IOUtils.toByteArray(is)  );
 			
 			// load the PSM data
 			zipEntry = zipFile.getEntry( StavroxConstants.PSM_ANNOTATIONS_FILENAME );
@@ -46,6 +51,7 @@ public class StavroxAnalysisLoader {
 			
 			ResultsReader rr = new ResultsReader();
 			List<Result> analysisResults = rr.getAnalysisResults( is );
+			is.close();
 			
 			sa.setAnalysisResults( analysisResults );
 			
@@ -55,6 +61,7 @@ public class StavroxAnalysisLoader {
 				is = zipFile.getInputStream( zipEntry );
 				DecoyHandler handler = new DecoyHandler();
 				handler.readDecoys( is );
+				is.close();
 				
 				sa.setDecoyHandler( handler );
 			} else {

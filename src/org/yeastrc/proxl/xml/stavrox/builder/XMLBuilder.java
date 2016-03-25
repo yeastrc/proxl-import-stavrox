@@ -16,6 +16,8 @@ import org.yeastrc.proxl.xml.stavrox.parsed.ParsedReportedPeptideUtils;
 import org.yeastrc.proxl.xml.stavrox.reader.Result;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
 import org.yeastrc.proxl.xml.stavrox.utils.NumberUtils;
+import org.yeastrc.proxl_import.api.xml_dto.ConfigurationFile;
+import org.yeastrc.proxl_import.api.xml_dto.ConfigurationFiles;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMass;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMasses;
 import org.yeastrc.proxl_import.api.xml_dto.DecoyLabel;
@@ -371,7 +373,19 @@ public class XMLBuilder {
 			}
 			
 		}
-	
+		
+		// add in config file
+		ConfigurationFiles xmlConfigurationFiles = new ConfigurationFiles();
+		proxlInputRoot.setConfigurationFiles( xmlConfigurationFiles );
+		
+		ConfigurationFile xmlConfigurationFile = new ConfigurationFile();
+		xmlConfigurationFiles.getConfigurationFile().add( xmlConfigurationFile );
+		
+		xmlConfigurationFile.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+		xmlConfigurationFile.setFileName( StavroxConstants.PROPERTIES_FILENAME );
+		xmlConfigurationFile.setFileContent( analysis.getPropertiesFileContents() );
+		
+		
 		CreateImportFileFromJavaObjectsMain.getInstance().createImportFileFromJavaObjectsMain(outputFile, proxlInputRoot);
 		
 	}

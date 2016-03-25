@@ -49,8 +49,22 @@ public class StavroxAnalysis {
 	public void setDecoyHandler(DecoyHandler decoyHandler) {
 		this.decoyHandler = decoyHandler;
 	}
+	
+	
+
+	public byte[] getPropertiesFileContents() {
+		return propertiesFileContents;
+	}
+
+	public void setPropertiesFileContents(byte[] propertiesFileContents) {
+		this.propertiesFileContents = propertiesFileContents;
+	}
+
+
 
 	private AnalysisProperties analysisProperties;
 	private List<Result> analysisResults;
 	private DecoyHandler decoyHandler;
+	private byte[] propertiesFileContents;
+	
 }
