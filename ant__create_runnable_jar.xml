@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="crux2ProxlXML.jar  Create Runnable Jar for Jar-in-Jar Loader">
+<project default="create_run_jar" name="stavrox2ProxlXML.jar  Create Runnable Jar for Jar-in-Jar Loader">
 
 	<property name="java_target" value="1.7"/>
 	<property name="java_source" value="1.7"/>
 		
 	<property name="java.source.character.set" value="iso-8859-1"/>
 
-	<property name="jar.main.class" value="org.yeastrc.proxl.xml.crux.main.MainProgram" />
+	<property name="jar.main.class" value="org.yeastrc.proxl.xml.stavrox.main.MainProgram" />
 
-	<property name="output_runnable_jar" value="crux2ProxlXML.jar"/>
+	<property name="output_runnable_jar" value="stavrox2ProxlXML.jar"/>
 
 	
     <property name="deploy" value="deploy" />
