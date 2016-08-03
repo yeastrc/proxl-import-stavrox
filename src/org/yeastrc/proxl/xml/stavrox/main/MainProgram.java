@@ -103,10 +103,10 @@ public class MainProgram {
 	}
 	
 	private static void printHelp() {
-		System.out.println( "Usage: java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FASTA file name [-s scan file name] -o /path/to/output.proxl.xml" );
-		System.out.println( "E.g.: java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA yeast2016.fa -s mydata.mzML -o ./output.proxl.xml" );
-		System.out.println( "      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA yeast2016.fa -o ./output.proxl.xml" );
-		System.out.println( "      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml" );
+		System.out.println( "Usage: java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FASTA file full path [-s scan file name] -o /path/to/output.proxl.xml" );
+		System.out.println( "E.g.: java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml" );
+		System.out.println( "      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml" );
+		System.out.println( "      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml" );
 
 		System.out.println( "\nOptional parameter: -a <scan number adjustment> -- Adjust the reported scan number by this amount." );
 		System.out.println( "\tAs of this writing, StavroX 3 has a bug in the parsing of mzML files that" );

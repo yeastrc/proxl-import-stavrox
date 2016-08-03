@@ -3,6 +3,8 @@ package org.yeastrc.proxl.xml.stavrox.builder;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.yeastrc.proxl.xml.stavrox.annotations.PSMAnnotationTypes;
@@ -59,10 +61,10 @@ import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.Create
  */
 public class XMLBuilder {
 
-	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
+	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
 		
 		ProxlInput proxlInputRoot = new ProxlInput();
-		proxlInputRoot.setFastaFilename( fastaFilename );
+		proxlInputRoot.setFastaFilename( ( new File( fastaFilePath ) ).getName() );
 		
 		SearchProgramInfo searchProgramInfo = new SearchProgramInfo();
 		proxlInputRoot.setSearchProgramInfo( searchProgramInfo );
@@ -153,18 +155,17 @@ public class XMLBuilder {
 		DecoyLabels xmlDecoyLabels = new DecoyLabels();
 		proxlInputRoot.setDecoyLabels( xmlDecoyLabels );
 		
-		{
-			DecoyLabel xmlDecoyLabel = new DecoyLabel();
-			xmlDecoyLabels.getDecoyLabel().add( xmlDecoyLabel );
-			
-			xmlDecoyLabel.setPrefix( "random_seq" );
-		}
 		
-		{
+		Collection<String> decoyLabels = new HashSet<>();
+		decoyLabels.add( "random_seq" );
+		decoyLabels.add( "random" );
+		
+		
+		for( String decoyLabel : decoyLabels ) {
 			DecoyLabel xmlDecoyLabel = new DecoyLabel();
 			xmlDecoyLabels.getDecoyLabel().add( xmlDecoyLabel );
 			
-			xmlDecoyLabel.setPrefix( "random_seq" );
+			xmlDecoyLabel.setPrefix( decoyLabel );
 		}
 		
 		
@@ -373,6 +374,10 @@ public class XMLBuilder {
 			}
 			
 		}
+		
+		// add in matched proteins
+		MatchedProteinsBuilder.getInstance().buildMatchedProteins( proxlInputRoot, new File( fastaFilePath ), decoyLabels );
+		
 		
 		// add in config file
 		ConfigurationFiles xmlConfigurationFiles = new ConfigurationFiles();
