@@ -18,6 +18,7 @@ import org.yeastrc.proxl.xml.stavrox.parsed.ParsedReportedPeptideUtils;
 import org.yeastrc.proxl.xml.stavrox.reader.Result;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
 import org.yeastrc.proxl.xml.stavrox.utils.NumberUtils;
+import org.yeastrc.proxl_import.api.xml_dto.AnnotationCutoffsOnImport;
 import org.yeastrc.proxl_import.api.xml_dto.ConfigurationFile;
 import org.yeastrc.proxl_import.api.xml_dto.ConfigurationFiles;
 import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMass;
@@ -42,9 +43,11 @@ import org.yeastrc.proxl_import.api.xml_dto.Peptide;
 import org.yeastrc.proxl_import.api.xml_dto.Peptides;
 import org.yeastrc.proxl_import.api.xml_dto.ProxlInput;
 import org.yeastrc.proxl_import.api.xml_dto.Psm;
+import org.yeastrc.proxl_import.api.xml_dto.PsmAnnotationCutoffsOnImport;
 import org.yeastrc.proxl_import.api.xml_dto.Psms;
 import org.yeastrc.proxl_import.api.xml_dto.ReportedPeptide;
 import org.yeastrc.proxl_import.api.xml_dto.ReportedPeptides;
+import org.yeastrc.proxl_import.api.xml_dto.SearchAnnotationCutoff;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgram;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgram.PsmAnnotationTypes;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgramInfo;
@@ -61,7 +64,7 @@ import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.Create
  */
 public class XMLBuilder {
 
-	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
+	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile, BigDecimal importCutoff ) throws Exception {
 		
 		ProxlInput proxlInputRoot = new ProxlInput();
 		proxlInputRoot.setFastaFilename( ( new File( fastaFilePath ) ).getName() );
@@ -94,6 +97,25 @@ public class XMLBuilder {
 		psmAnnotationTypes.setDescriptivePsmAnnotationTypes( descriptivePsmAnnotationTypes );
 		descriptivePsmAnnotationTypes.getDescriptivePsmAnnotationType().addAll( PSMAnnotationTypes.getDescriptivePsmAnnotationTypes() );
 
+		
+		/*
+		 * Define the default import cutoffs
+		 */
+		if( importCutoff != null  && importCutoff.floatValue() < 1.0 ) {
+			AnnotationCutoffsOnImport annotationCutoffsOnImport = new AnnotationCutoffsOnImport();
+			searchProgramInfo.setAnnotationCutoffsOnImport( annotationCutoffsOnImport );
+			
+			PsmAnnotationCutoffsOnImport psmAnnotationCutoffsOnImport = new PsmAnnotationCutoffsOnImport();
+			annotationCutoffsOnImport.setPsmAnnotationCutoffsOnImport( psmAnnotationCutoffsOnImport );
+			
+			SearchAnnotationCutoff searchAnnotationCutoff = new SearchAnnotationCutoff();
+			searchAnnotationCutoff.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_FDR );
+			searchAnnotationCutoff.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
+			searchAnnotationCutoff.setCutoffValue( importCutoff );
+			
+			psmAnnotationCutoffsOnImport.getSearchAnnotationCutoff().add( searchAnnotationCutoff );
+		}
+		
 		
 		//
 		// Define which annotation types are visible by default

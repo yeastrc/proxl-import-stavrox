@@ -4,10 +4,13 @@ import jargs.gnu.CmdLineParser;
 import jargs.gnu.CmdLineParser.IllegalOptionValueException;
 import jargs.gnu.CmdLineParser.UnknownOptionException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
 
 import org.yeastrc.proxl.xml.stavrox.builder.XMLBuilder;
-import org.yeastrc.proxl.xml.stavrox.constants.LinkerConstants;
+import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysisLoader;
 import org.yeastrc.proxl.xml.stavrox.utils.LinkerMapper;
@@ -31,7 +34,7 @@ public class MainProgram {
 	 * 
 	 * @throws Exception If there is a problem
 	 */
-	private void convertData( String filename, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, String outputFilename ) throws Exception {
+	private void convertData( String filename, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, String outputFilename, BigDecimal importCutoff ) throws Exception {
 		
 		File file = new File( filename );
 		StavroxAnalysisLoader loader = new StavroxAnalysisLoader();
@@ -53,7 +56,7 @@ public class MainProgram {
 		*/
 		
 		XMLBuilder builder = new XMLBuilder();
-		builder.buildAndSaveXML(analysis, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, new File( outputFilename ) );
+		builder.buildAndSaveXML(analysis, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, new File( outputFilename ), importCutoff );
 		
 	}
 	
@@ -73,6 +76,7 @@ public class MainProgram {
 		CmdLineParser.Option scanFileWithPathCommandLineOpt = cmdLineParser.addStringOption( 's', "scan_file" );
 		CmdLineParser.Option outputFilenameOpt = cmdLineParser.addStringOption( 'o', "output_file" );
 		CmdLineParser.Option scanNumberAdjustmentOpt = cmdLineParser.addIntegerOption( 'a', "scan_adjust" );
+		CmdLineParser.Option importFilterCutoffOpt = cmdLineParser.addStringOption( 'i', "import_cutoff" );
 
         // parse command line options
         try { cmdLineParser.parse(args); }
@@ -91,37 +95,42 @@ public class MainProgram {
         String fastaFilename = (String)cmdLineParser.getOptionValue( fastaOpt );
         String scanFilename = (String)cmdLineParser.getOptionValue( scanFileWithPathCommandLineOpt );
         String outputFilename = (String)cmdLineParser.getOptionValue( outputFilenameOpt );
+        
+        
+        BigDecimal importCutoff = null;
+        String importCutoffString = (String)cmdLineParser.getOptionValue( importFilterCutoffOpt );
+        
+        if( importCutoffString != null ) {
+	        try { importCutoff = new BigDecimal( importCutoffString ); }
+	        catch( Exception e ) {
+	        	System.err.println( "Expected a number for the import cutoff filter, got: " + importCutoffString );
+	        }
+        }
+        
+        if( importCutoff == null )
+        	importCutoff = new BigDecimal( StavroxConstants.DEFAULT_IMPORT_CUTOFF );
 
         Integer scanNumberAdjustment = (Integer)cmdLineParser.getOptionValue( scanNumberAdjustmentOpt );
         if( scanNumberAdjustment == null ) scanNumberAdjustment = 0;
 		
 		MainProgram mp = new MainProgram();
-		mp.convertData( resultsFilename, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, outputFilename );
+		mp.convertData( resultsFilename, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, outputFilename, importCutoff );
 		
 		
 		
 	}
 	
-	private static void printHelp() {
-		System.out.println( "Usage: java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FASTA file full path [-s scan file name] -o /path/to/output.proxl.xml" );
-		System.out.println( "E.g.: java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml" );
-		System.out.println( "      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml" );
-		System.out.println( "      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml" );
-
-		System.out.println( "\nOptional parameter: -a <scan number adjustment> -- Adjust the reported scan number by this amount." );
-		System.out.println( "\tAs of this writing, StavroX 3 has a bug in the parsing of mzML files that" );
-		System.out.println( "\tcauses incorrect scan numbers to be reported. It uses the spectrum index" );
-		System.out.println( "\tinstead of the scan number of the spectrum at that index. This causes" );
-		System.out.println( "\ta mismatch when the ProXL XML importer attempts to find the referenced" );
-		System.out.println( "\tscans. In testing, the true scan number appears to always be 1 higher" );
-		System.out.println( "\tthan the reported scan number when using mzML files. \"-a 1\" will adjust" );
-		System.out.println( "\tthe scan numbers appropriately." );
+	public static void printHelp() {
 		
-		System.out.println( "\nValid linkers: " );
-		for( String s : LinkerConstants.VALID_LINKERS ) {
-			System.out.println( "\t" + s );
+		try( BufferedReader br = new BufferedReader( new InputStreamReader( MainProgram.class.getResourceAsStream( "help.txt" ) ) ) ) {
+			
+			String line = null;
+			while ( ( line = br.readLine() ) != null )
+				System.out.println( line );				
+			
+		} catch ( Exception e ) {
+			System.out.println( "Error printing help." );
 		}
-		
 	}
 	
 }

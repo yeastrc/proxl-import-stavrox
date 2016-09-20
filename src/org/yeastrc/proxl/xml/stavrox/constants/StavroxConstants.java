@@ -17,4 +17,6 @@ public class StavroxConstants {
 	public static final int PSM_TYPE_LOOPLINK = 1;
 	public static final int PSM_TYPE_CROSSLINK = 2;
 	
+	public static final String DEFAULT_IMPORT_CUTOFF = "0.05";
+	
 }
