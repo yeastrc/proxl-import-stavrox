@@ -104,6 +104,7 @@ public class MainProgram {
 	        try { importCutoff = new BigDecimal( importCutoffString ); }
 	        catch( Exception e ) {
 	        	System.err.println( "Expected a number for the import cutoff filter, got: " + importCutoffString );
+	        	System.exit( 1 );
 	        }
         }
         
