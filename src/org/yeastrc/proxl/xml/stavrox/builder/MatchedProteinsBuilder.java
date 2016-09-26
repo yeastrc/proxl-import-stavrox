@@ -115,10 +115,10 @@ public class MatchedProteinsBuilder {
 			
 			for( FASTAEntry entry = fastaReader.readNext(); entry != null; entry = fastaReader.readNext() ) {
 
-				for( FASTAHeader header : entry.getHeaders() ) {
+				if( isDecoyFastaEntry( entry, decoyIdentifiers ) )
+					continue;
 				
-					if( isDecoyName( header.getName(), decoyIdentifiers ) )
-						continue;
+				for( FASTAHeader header : entry.getHeaders() ) {
 					
 					if( !proteinAnnotations.containsKey( entry.getSequence() ) )
 						proteinAnnotations.put( entry.getSequence(), new HashSet<FastaProteinAnnotation>() );
@@ -149,20 +149,23 @@ public class MatchedProteinsBuilder {
 	}
 	
 	/**
-	 * Returns false if the supplied name does not contain any of the supplied decoy identifiers (case insensitve)
+	 * Return true if the supplied FASTA entry is a decoy entry. False otherwise.
+	 * An entry is considered a decoy if any of the supplied decoy identifiers are present
+	 * anywhere in the header line.
 	 * 
-	 * @param name
+	 * @param entry
 	 * @param decoyIdentifiers
 	 * @return
 	 */
-	private boolean isDecoyName( String name, Collection<String> decoyIdentifiers ) {
-		
+	private boolean isDecoyFastaEntry( FASTAEntry entry, Collection<String> decoyIdentifiers ) {
+
 		for( String decoyId : decoyIdentifiers ) {
-			if( name.toLowerCase().contains( decoyId.toLowerCase() ) )
+			if( entry.getHeaderLine().toLowerCase().contains( decoyId.toLowerCase() ) )
 				return true;
 		}
 		
-		return false;		
+		return false;
+		
 	}
 	
 	
