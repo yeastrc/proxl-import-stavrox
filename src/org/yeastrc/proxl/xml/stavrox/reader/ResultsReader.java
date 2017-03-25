@@ -221,11 +221,11 @@ public class ResultsReader {
 		
 		// check if scan number is reported as this syntax: "Q_2013_1010_RJ_07.17522.17522.3"
 		{
-			Pattern r = Pattern.compile( "^(.+)\\.\\d+\\.\\d+\\.\\d+$" );
+			Pattern r = Pattern.compile( "^(.+)\\.(\\d+)\\.\\d+\\.\\d+$" );
 			Matcher m = r.matcher( scanNumberField );
 			
 			if( m.matches() ) {
-
+				
 				try {
 					scanNumber = Integer.parseInt( m.group( 2 ) );
 				} catch( Exception e ) {
