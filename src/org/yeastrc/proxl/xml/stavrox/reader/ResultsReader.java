@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 
@@ -78,7 +80,9 @@ public class ResultsReader {
 				// skip dead-ends (monolinks) and nulls (looplinks) for now
 				//if( result.getPeptide2().equals( "0" ) || result.getPeptide2().equals( "1" ) ) continue;
 				
-				result.setScanNumber( Integer.parseInt( fields [ 14 ] ) );
+				result.setScanNumber( getScanNumberFromScanField( fields[ 14 ] ) );
+				
+				//result.setScanNumber( Integer.parseInt( fields [ 14 ] ) );
 				
 				result.setPosition1String( fields[ 20 ] );
 				result.setPosition2String( fields[ 21 ] );
@@ -172,6 +176,68 @@ public class ResultsReader {
 		
 		return returnedResults;
 		
+	}
+	
+	/**
+	 * StavroX can report the scan number in different ways, depending the file format of the scan file. Attempt
+	 * to get the scan number based on ways I've thus far encountered.
+	 * 
+	 * @param scanNumberField
+	 * @return
+	 * @throws Exception
+	 */
+	private int getScanNumberFromScanField( String scanNumberField ) throws Exception {
+		
+		Integer scanNumber = null;
+		
+		// check if the scan number is just reported as an integer
+		{
+			try {
+				scanNumber = Integer.parseInt( scanNumberField );
+			} catch( Exception e ) {
+				;
+			}
+			
+			if( scanNumber != null ) { return scanNumber; }
+
+		}
+		
+		
+		
+		// check if scan number is reported as this syntax: "Scan 13190 (rt=14.026) [QE_RH_RZtrisnRP_xlink_01.raw]"
+		{
+			String[] fields = scanNumberField.split( " " );
+			if( fields.length > 1 && fields[ 0 ].equals( "Scan" ) ) {
+				try {
+					scanNumber = Integer.parseInt( fields[ 1 ] );
+				} catch( Exception e ) {
+					;
+				}
+				
+				if( scanNumber != null ) { return scanNumber; }
+			}
+		}
+		
+		
+		// check if scan number is reported as this syntax: "Q_2013_1010_RJ_07.17522.17522.3"
+		{
+			Pattern r = Pattern.compile( "^(.+)\\.\\d+\\.\\d+\\.\\d+$" );
+			Matcher m = r.matcher( scanNumberField );
+			
+			if( m.matches() ) {
+
+				try {
+					scanNumber = Integer.parseInt( m.group( 2 ) );
+				} catch( Exception e ) {
+					;
+				}
+				
+				if( scanNumber != null ) { return scanNumber; }
+
+			}
+		}
+		
+		throw new Exception( "Unable to get scan number from the scan number field: " + scanNumberField );		
 	}
 	
 }
