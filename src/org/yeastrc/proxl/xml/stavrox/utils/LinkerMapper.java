@@ -20,6 +20,8 @@ public class LinkerMapper {
 
 		linkerMap.put( "dss", "DSS/BS3" );
 		linkerMap.put( "bs3", "DSS/BS3" );
+		linkerMap.put( "dss.sty", "DSS/BS3" );
+		linkerMap.put( "bs3.sty", "DSS/BS3" );
 		linkerMap.put( "edc", "EDC" );
 		linkerMap.put( "bs2", "BS2G" );		
 

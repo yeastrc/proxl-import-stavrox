@@ -28,3 +28,6 @@ Valid linkers:
 	bs3
 	edc
 	bs2
+	
+	bs3.sty (supports links from K-K/S/T/Y)
+	dss.sty (supports links from K-K/S/T/Y)
