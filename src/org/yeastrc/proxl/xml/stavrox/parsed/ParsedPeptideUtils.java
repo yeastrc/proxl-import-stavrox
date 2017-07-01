@@ -1,11 +1,15 @@
 package org.yeastrc.proxl.xml.stavrox.parsed;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.yeastrc.proteomics.peptide.atom.AtomUtils;
 import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 import org.yeastrc.proxl.xml.stavrox.reader.AnalysisProperties;
 import org.yeastrc.proxl.xml.stavrox.reader.Result;
+import org.yeastrc.proxl.xml.stavrox.utils.MassUtils;
 
 public class ParsedPeptideUtils {
 
@@ -42,6 +46,8 @@ public class ParsedPeptideUtils {
 	private static ParsedPeptide getMonolinkedParsedPeptide( String stavroxPeptide, String stavroxPosition, Result result, AnalysisProperties properties ) throws Exception {
 		String nakedPeptide = "";
 		Collection<ParsedPeptideModification> mods = new ArrayList<ParsedPeptideModification>();
+
+		double staticModTotal = 0.0;	// total static mod mass added
 		
 		// stavrox peptide all being with either { or [ and end with } or ]. Remove the first and last characters
 		stavroxPeptide = stavroxPeptide.substring(1, stavroxPeptide.length() - 1);
@@ -54,6 +60,9 @@ public class ParsedPeptideUtils {
 		    // is this a static mod?
 		    if( properties.getStaticMods().containsKey( stavroxResidue ) ) {
 		    	nakedPeptide += properties.getStaticMods().get( stavroxResidue ).getFrom();		// use the unmodded code for this residue
+		    	
+		    	// add to our static mod mass adjustment for later
+		    	staticModTotal += MassUtils.getMassForModification( properties.getStaticMods().get( stavroxResidue ), properties );
 		    }
 		    
 		    // is this a variable mod?
@@ -75,15 +84,31 @@ public class ParsedPeptideUtils {
 		    
 		}
 		
+		// get calculated monoisotopic mass for peptide, including dynamic and static mods
+		double massPreMonolink = MassUtils.calculateNeutralMassOfPeptide( nakedPeptide, mods );		
+		massPreMonolink += staticModTotal;
+		
+		double stavroxCalculatedMass = result.getCandidateMass();
+
+		// stavrox reports MH+ mass
+		stavroxCalculatedMass -= AtomUtils.ATOM_HYDROGEN.getMass( org.yeastrc.proteomics.mass.MassUtils.MASS_TYPE_MONOISOTOPIC );
+		
+		double massOfMonolink = stavroxCalculatedMass - massPreMonolink;
+		BigDecimal roundedMassOfMonolink = new BigDecimal( massOfMonolink );
+		roundedMassOfMonolink = roundedMassOfMonolink.setScale( 4, RoundingMode.HALF_UP );
+		
 		// handle the monolinked position as a variable mod
 		stavroxPosition = stavroxPosition.substring( 1 );
 		int position = Integer.parseInt( stavroxPosition );
 		if( position == 0 ) { position = 1; }
 		
 		ParsedPeptideModification mod = new ParsedPeptideModification();
-		mod.setMass( result.getLinker().getMass( properties ) );
+		//mod.setMass( result.getLinker().getMass( properties ) );
+		mod.setMass( roundedMassOfMonolink.doubleValue() );
 		mod.setMonolink( true );
 		mod.setPosition( position );
+		
+		
 		
 		mods.add( mod );
 				

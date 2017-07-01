@@ -1,9 +1,12 @@
 package org.yeastrc.proxl.xml.stavrox.utils;
 
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.yeastrc.proteomics.peptide.peptide.Peptide;
 import org.yeastrc.proxl.xml.stavrox.mods.IStavroxModification;
+import org.yeastrc.proxl.xml.stavrox.parsed.ParsedPeptideModification;
 import org.yeastrc.proxl.xml.stavrox.reader.AnalysisProperties;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAminoAcid;
 
@@ -80,6 +83,29 @@ public class MassUtils {
 		}
 		
 		return toMass - fromMass;
+	}
+	
+	
+	/**
+	 * Calculate the mass of the supplied peptide sequence plus any mods that are passed in.
+	 * 
+	 * @param sequence
+	 * @param mods
+	 * @return
+	 * @throws Exception
+	 */
+	public static double calculateNeutralMassOfPeptide( String sequence, Collection<ParsedPeptideModification> mods ) throws Exception {
+		
+		Peptide peptide = new Peptide( sequence );
+		double mass = peptide.getMass( org.yeastrc.proteomics.mass.MassUtils.MASS_TYPE_MONOISOTOPIC );
+		
+		if( mods != null ) {
+			for( ParsedPeptideModification mod : mods ) {
+				mass += mod.getMass();
+			}
+		}
+				
+		return mass;
 	}
 	
 }
