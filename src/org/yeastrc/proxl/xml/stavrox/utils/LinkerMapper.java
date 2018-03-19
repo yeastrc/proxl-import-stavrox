@@ -25,6 +25,7 @@ public class LinkerMapper {
 		linkerMap.put( "edc", "EDC" );
 		linkerMap.put( "bs2", "BS2G" );		
 		linkerMap.put( "sulfo-smcc", "Sulfo-SMCC");
+		linkerMap.put( "dsso", "DSSO" );
 
 		
 		if( linkerMap.containsKey( proxlAbbr ) )
