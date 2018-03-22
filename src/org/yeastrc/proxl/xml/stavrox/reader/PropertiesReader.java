@@ -26,6 +26,7 @@ public class PropertiesReader {
 	private static final int VARMODIFICATION	 = 6;
 	private static final int STATMODIFICATION	 = 7;	
 	private static final int UNKNOWN			 = 8;
+	private static final int REPORTERIONS		 = 9;
 	
 	public AnalysisProperties getAnalysisProperties( InputStream is ) throws Exception {
 
@@ -76,6 +77,9 @@ public class PropertiesReader {
 						String fields[] = currentLine.split( "=" );
 						ap.setCrosslinkerIndex( Integer.parseInt( fields[ 1 ] ) );						
 					}
+					
+					else if( currentLine.equals( "REPORTERIONS" ) )
+						mode = REPORTERIONS;
 					
 					else {
 						
@@ -170,7 +174,12 @@ public class PropertiesReader {
 					mod.setTo( fields [ 1 ] );
 					
 					ap.getStaticMods().put( fields[ 1 ], mod );					
-				}				
+				}
+				
+				else if( mode == REPORTERIONS ) {
+					continue;	// nothing to do for this.				
+				}
+				
 			}
 			
 		} finally {
