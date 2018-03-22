@@ -25,6 +25,7 @@ public class PropertiesReader {
 	private static final int PROTEASE			 = 5;
 	private static final int VARMODIFICATION	 = 6;
 	private static final int STATMODIFICATION	 = 7;	
+	private static final int UNKNOWN			 = 8;
 	
 	public AnalysisProperties getAnalysisProperties( InputStream is ) throws Exception {
 
@@ -77,7 +78,9 @@ public class PropertiesReader {
 					}
 					
 					else {
-						throw new Exception( "Unknown header line following an END line. Got: '" + currentLine + "'" );
+						
+						System.err.println( "INFO: Got unknown header in properties file: " + currentLine );
+						mode = UNKNOWN;						
 					}
 					
 					continue;
