@@ -65,13 +65,12 @@ Optional parameters:
 	                          FDR will be used.
 	
 
-Valid linkers: 
-	dss
-	bs3
-	edc
-	bs2
-	sulfo-smcc
-	dsso
-	
-	bs3.sty (supports links from K/nterm-K/S/T/Y/nterm)
-	dss.sty (supports links from K/nterm-K/S/T/Y/nterm)
+Valid linkers:
+ * dss
+ * bs3
+ * edc
+ * bs2
+ * sulfo-smcc
+ * dsso
+ * bs3.sty (supports links from K/nterm-K/S/T/Y/nterm)
+ * dss.sty (supports links from K/nterm-K/S/T/Y/nterm)
