@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
 import org.yeastrc.proxl.xml.stavrox.builder.XMLBuilder;
+import org.yeastrc.proxl.xml.stavrox.constants.ConverterConstants;
 import org.yeastrc.proxl.xml.stavrox.constants.StavroxConstants;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysisLoader;
@@ -62,6 +63,8 @@ public class MainProgram {
 	
 	
 	public static void main(String[] args ) throws Exception {
+		
+		printStartup();
 		
 		if( args.length == 0 ) {
 			printHelp();
@@ -119,6 +122,21 @@ public class MainProgram {
 		
 		
 		
+	}
+	
+	public static void printStartup() {
+		
+		try( BufferedReader br = new BufferedReader( new InputStreamReader( MainProgram.class.getResourceAsStream( "startup.txt" ) ) ) ) {
+			
+			String line = null;
+			while ( ( line = br.readLine() ) != null ) {
+				line = line.replace( "#VERSION#", ConverterConstants._CONVERTER_VERSION );
+				System.out.println( line );
+			}
+			
+		} catch ( Exception e ) {
+			System.out.println( "Error printing help." );
+		}
 	}
 	
 	public static void printHelp() {
