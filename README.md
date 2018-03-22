@@ -25,7 +25,9 @@ Usage: ``java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FA
 E.g.:
 
  ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml``
+
  ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml``
+
  ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml``
 
 
