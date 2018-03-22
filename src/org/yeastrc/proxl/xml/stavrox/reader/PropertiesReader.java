@@ -89,7 +89,11 @@ public class PropertiesReader {
 				
 				// handle processing the various sections of the properties file
 				
-				if( mode == SETTINGS ) {
+				if( mode == UNKNOWN ) {
+					continue;
+				}
+				
+				else if( mode == SETTINGS ) {
 					
 					// for some reason, the settings at the beginning of this file do not have a header line or an END line
 					if( currentLine.equals( "ELEMENTS" ) ) {
