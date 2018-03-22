@@ -77,7 +77,7 @@ public class PropertiesReader {
 					}
 					
 					else {
-						throw new Exception( "Unknown header line following an END line." );
+						throw new Exception( "Unknown header line following an END line. Got: '" + currentLine + "'" );
 					}
 					
 					continue;

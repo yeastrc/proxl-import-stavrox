@@ -4,7 +4,27 @@ E.g.: java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2
       java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml
       java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml
 
+
+Required parameters:
+
+    -r </path/to/results.zhrs> -- The full path to the results file from the
+                                  StavroX analysis.
+    
+    -f </path/to/fasta.fa> -- The full path to the FASTA file used in the
+                              StavroX analysis.
+    
+    -l <name of cross-linker> -- The name of the cross-linker used. See
+                                 below for a list of valid linkers.
+    
+    -o </path/to/output.xml> -- The full path to the desired output proxl
+                                XML file.
+
+
 Optional parameters:
+
+    -s <scan file name> -- The name of the scan file (e.g. mydata.mzML). Used to
+                           annotate PSMs with the name of the scan file in which
+                           the scan can be found.
 
 	-a <scan number adjustment> -- Adjust the reported scan number by this amount.
 
