@@ -20,11 +20,13 @@ For more information about Proxl, visit http://proxl-ms.org/.
 Command line documentation
 ---------------------------
 
-Usage: java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FASTA file full path [-s scan file name] -o /path/to/output.proxl.xml
+Usage: ``java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FASTA file full path [-s scan file name] -o /path/to/output.proxl.xml``
 
-E.g.: java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml
-      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml
-      java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml
+E.g.:
+
+ ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml``
+ ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml``
+ ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml``
 
 
 Required parameters:
