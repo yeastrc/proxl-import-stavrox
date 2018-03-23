@@ -237,6 +237,25 @@ public class ResultsReader {
 			}
 		}
 		
+		// check if scan number is reported as this syntax: "NS=sn9870"
+		{
+			Pattern r = Pattern.compile( "^NS=sn(\\d+)$" );
+			Matcher m = r.matcher( scanNumberField );
+			
+			if( m.matches() ) {
+				
+				try {
+					scanNumber = Integer.parseInt( m.group( 1 ) );
+				} catch( Exception e ) {
+					;
+				}
+				
+				if( scanNumber != null ) { return scanNumber; }
+
+			}
+		}
+		
+		
 		throw new Exception( "Unable to get scan number from the scan number field: " + scanNumberField );		
 	}
 	
