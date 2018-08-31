@@ -255,6 +255,25 @@ public class ResultsReader {
 			}
 		}
 		
+		// check if scan number is reported as this syntax:
+		// QE_HF_27042018_PR957_ANH_Sample_4.4015.4015.4 File:"QE_HF_27042018_PR957_A NH_Sample_4.raw", NativeID:"controllerType=0 controllerNumber=1 scan=4015"
+		{
+			Pattern r = Pattern.compile( "^.*scan=(\\d+).*$" );
+			Matcher m = r.matcher( scanNumberField );
+			
+			if( m.matches() ) {
+				
+				try {
+					scanNumber = Integer.parseInt( m.group( 1 ) );
+				} catch( Exception e ) {
+					;
+				}
+				
+				if( scanNumber != null ) { return scanNumber; }
+
+			}
+		}
+		
 		
 		throw new Exception( "Unable to get scan number from the scan number field: " + scanNumberField );		
 	}
