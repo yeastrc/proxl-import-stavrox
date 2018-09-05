@@ -23,15 +23,16 @@ public class LinkerMapper {
 		linkerMap.put( "dss.sty", "DSS/BS3" );
 		linkerMap.put( "bs3.sty", "DSS/BS3" );
 		linkerMap.put( "edc", "EDC" );
-		linkerMap.put( "bs2", "BS2G" );		
+		linkerMap.put( "bs2", "BS2G" );
 		linkerMap.put( "sulfo-smcc", "Sulfo-SMCC");
 		linkerMap.put( "dsso", "DSSO" );
+		linkerMap.put( "tg", "TG" );
 
 		
 		if( linkerMap.containsKey( proxlAbbr ) )
 			return linkerMap.get( proxlAbbr );
 		
 		throw new Exception( "Unsupported linker name: " + proxlAbbr );
-		
+
 	}
 }

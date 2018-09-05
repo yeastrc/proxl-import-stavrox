@@ -50,6 +50,7 @@ Valid linkers:
 	bs2
 	sulfo-smcc
 	dsso
+	tg (short for transglutaminase)
 	
 	bs3.sty (supports links from K/nterm-K/S/T/Y/nterm)
 	dss.sty (supports links from K/nterm-K/S/T/Y/nterm)
