@@ -155,18 +155,23 @@ public class XMLBuilder {
 		//
 		// Define the static mods
 		//
-		StaticModifications smods = new StaticModifications();
-		proxlInputRoot.setStaticModifications( smods );
 		
-		for( String smodsTo : analysis.getAnalysisProperties().getStaticMods().keySet() ) {
+		if( analysis.getAnalysisProperties().getStaticMods() != null &&
+				analysis.getAnalysisProperties().getStaticMods().size() > 0 ) {
 			
-			StavroxStaticModification stavroxSmod = analysis.getAnalysisProperties().getStaticMods().get( smodsTo );
-			StaticModification xmlSmod = new StaticModification();
+			StaticModifications smods = new StaticModifications();
+			proxlInputRoot.setStaticModifications( smods );
 			
-			xmlSmod.setAminoAcid( stavroxSmod.getFrom() );
-			xmlSmod.setMassChange( NumberUtils.getRoundedBigDecimal( stavroxSmod.getMassShift( analysis.getAnalysisProperties() ) ) );			
-			
-			smods.getStaticModification().add( xmlSmod );
+			for( String smodsTo : analysis.getAnalysisProperties().getStaticMods().keySet() ) {
+				
+				StavroxStaticModification stavroxSmod = analysis.getAnalysisProperties().getStaticMods().get( smodsTo );
+				StaticModification xmlSmod = new StaticModification();
+				
+				xmlSmod.setAminoAcid( stavroxSmod.getFrom() );
+				xmlSmod.setMassChange( NumberUtils.getRoundedBigDecimal( stavroxSmod.getMassShift( analysis.getAnalysisProperties() ) ) );			
+				
+				smods.getStaticModification().add( xmlSmod );
+			}	
 		}
 
 		
