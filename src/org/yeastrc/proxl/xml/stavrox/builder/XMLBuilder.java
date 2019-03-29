@@ -64,7 +64,7 @@ import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.Create
  */
 public class XMLBuilder {
 
-	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile, BigDecimal importCutoff ) throws Exception {
+	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
 		
 		ProxlInput proxlInputRoot = new ProxlInput();
 		proxlInputRoot.setFastaFilename( ( new File( fastaFilePath ) ).getName() );
@@ -96,25 +96,6 @@ public class XMLBuilder {
 		DescriptivePsmAnnotationTypes descriptivePsmAnnotationTypes = new DescriptivePsmAnnotationTypes();
 		psmAnnotationTypes.setDescriptivePsmAnnotationTypes( descriptivePsmAnnotationTypes );
 		descriptivePsmAnnotationTypes.getDescriptivePsmAnnotationType().addAll( PSMAnnotationTypes.getDescriptivePsmAnnotationTypes() );
-
-		
-		/*
-		 * Define the default import cutoffs
-		 */
-		if( importCutoff != null  && importCutoff.floatValue() < 1.0 ) {
-			AnnotationCutoffsOnImport annotationCutoffsOnImport = new AnnotationCutoffsOnImport();
-			searchProgramInfo.setAnnotationCutoffsOnImport( annotationCutoffsOnImport );
-			
-			PsmAnnotationCutoffsOnImport psmAnnotationCutoffsOnImport = new PsmAnnotationCutoffsOnImport();
-			annotationCutoffsOnImport.setPsmAnnotationCutoffsOnImport( psmAnnotationCutoffsOnImport );
-			
-			SearchAnnotationCutoff searchAnnotationCutoff = new SearchAnnotationCutoff();
-			searchAnnotationCutoff.setAnnotationName( PSMAnnotationTypes.ANNOTATION_TYPE_FDR );
-			searchAnnotationCutoff.setSearchProgram( StavroxConstants.SEARCH_PROGRAM_NAME );
-			searchAnnotationCutoff.setCutoffValue( importCutoff );
-			
-			psmAnnotationCutoffsOnImport.getSearchAnnotationCutoff().add( searchAnnotationCutoff );
-		}
 		
 		
 		//

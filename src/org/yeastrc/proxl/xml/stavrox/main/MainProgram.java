@@ -35,7 +35,7 @@ public class MainProgram {
 	 * 
 	 * @throws Exception If there is a problem
 	 */
-	private void convertData( String filename, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, String outputFilename, BigDecimal importCutoff ) throws Exception {
+	private void convertData( String filename, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, String outputFilename ) throws Exception {
 		
 		File file = new File( filename );
 		StavroxAnalysisLoader loader = new StavroxAnalysisLoader();
@@ -57,7 +57,7 @@ public class MainProgram {
 		*/
 		
 		XMLBuilder builder = new XMLBuilder();
-		builder.buildAndSaveXML(analysis, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, new File( outputFilename ), importCutoff );
+		builder.buildAndSaveXML(analysis, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, new File( outputFilename ) );
 		
 	}
 	
@@ -79,7 +79,6 @@ public class MainProgram {
 		CmdLineParser.Option scanFileWithPathCommandLineOpt = cmdLineParser.addStringOption( 's', "scan_file" );
 		CmdLineParser.Option outputFilenameOpt = cmdLineParser.addStringOption( 'o', "output_file" );
 		CmdLineParser.Option scanNumberAdjustmentOpt = cmdLineParser.addIntegerOption( 'a', "scan_adjust" );
-		CmdLineParser.Option importFilterCutoffOpt = cmdLineParser.addStringOption( 'i', "import_cutoff" );
 
         // parse command line options
         try { cmdLineParser.parse(args); }
@@ -98,30 +97,13 @@ public class MainProgram {
         String fastaFilename = (String)cmdLineParser.getOptionValue( fastaOpt );
         String scanFilename = (String)cmdLineParser.getOptionValue( scanFileWithPathCommandLineOpt );
         String outputFilename = (String)cmdLineParser.getOptionValue( outputFilenameOpt );
-        
-        
-        BigDecimal importCutoff = null;
-        String importCutoffString = (String)cmdLineParser.getOptionValue( importFilterCutoffOpt );
-        
-        if( importCutoffString != null ) {
-	        try { importCutoff = new BigDecimal( importCutoffString ); }
-	        catch( Exception e ) {
-	        	System.err.println( "Expected a number for the import cutoff filter, got: " + importCutoffString );
-	        	System.exit( 1 );
-	        }
-        }
-        
-        if( importCutoff == null )
-        	importCutoff = new BigDecimal( StavroxConstants.DEFAULT_IMPORT_CUTOFF );
 
         Integer scanNumberAdjustment = (Integer)cmdLineParser.getOptionValue( scanNumberAdjustmentOpt );
         if( scanNumberAdjustment == null ) scanNumberAdjustment = 0;
 		
 		MainProgram mp = new MainProgram();
-		mp.convertData( resultsFilename, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, outputFilename, importCutoff );
-		
-		
-		
+		mp.convertData( resultsFilename, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, outputFilename );
+
 	}
 	
 	public static void printStartup() {

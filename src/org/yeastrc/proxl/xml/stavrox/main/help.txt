@@ -36,12 +36,6 @@ Optional parameters:
 	than the reported scan number when using mzML files. "-a 1" will adjust
 	the scan numbers appropriately.
 	
-	
-	-i <import FDR cutoff> -- PSMs with a FDR greater than this amount will not
-	                          be imported into ProXL. Default is 0.05. If set
-	                          to a value greater than or equal to 1, no import
-	                          FDR will be used.
-	
 
 Valid linkers: 
 	dss
