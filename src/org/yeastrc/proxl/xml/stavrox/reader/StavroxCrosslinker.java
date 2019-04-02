@@ -17,12 +17,16 @@ public class StavroxCrosslinker {
 	public double getMass( AnalysisProperties properties ) throws Exception {
 		return LinkerUtils.calculateLinkerMass( this, properties );
 	}
-	
+
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString( this );
+		return "StavroxCrosslinker{" +
+				"name='" + name + '\'' +
+				", formula='" + formula + '\'' +
+				", crosslinkerEnds=" + crosslinkerEnds +
+				'}';
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -35,14 +39,16 @@ public class StavroxCrosslinker {
 	public void setFormula(String formula) {
 		this.formula = formula;
 	}
-	public List<String> getBindingRules() {
-		return bindingRules;
+
+	public List<StavroxCrosslinkerEnd> getCrosslinkerEnds() {
+		return crosslinkerEnds;
 	}
-	public void setBindingRules(List<String> bindingRules) {
-		this.bindingRules = bindingRules;
+
+	public void setCrosslinkerEnds(List<StavroxCrosslinkerEnd> crosslinkerEnds) {
+		this.crosslinkerEnds = crosslinkerEnds;
 	}
 
 	private String name;
 	private String formula;
-	private List<String> bindingRules;	
+	private List<StavroxCrosslinkerEnd> crosslinkerEnds;
 }

@@ -17,44 +17,11 @@ import org.yeastrc.proxl.xml.stavrox.parsed.ParsedReportedPeptide;
 import org.yeastrc.proxl.xml.stavrox.parsed.ParsedReportedPeptideUtils;
 import org.yeastrc.proxl.xml.stavrox.reader.Result;
 import org.yeastrc.proxl.xml.stavrox.reader.StavroxAnalysis;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxCrosslinker;
+import org.yeastrc.proxl.xml.stavrox.reader.StavroxCrosslinkerEnd;
 import org.yeastrc.proxl.xml.stavrox.utils.NumberUtils;
-import org.yeastrc.proxl_import.api.xml_dto.AnnotationCutoffsOnImport;
-import org.yeastrc.proxl_import.api.xml_dto.ConfigurationFile;
-import org.yeastrc.proxl_import.api.xml_dto.ConfigurationFiles;
-import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMass;
-import org.yeastrc.proxl_import.api.xml_dto.CrosslinkMasses;
-import org.yeastrc.proxl_import.api.xml_dto.DecoyLabel;
-import org.yeastrc.proxl_import.api.xml_dto.DecoyLabels;
-import org.yeastrc.proxl_import.api.xml_dto.DefaultVisibleAnnotations;
-import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotation;
-import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotationTypes;
-import org.yeastrc.proxl_import.api.xml_dto.DescriptivePsmAnnotations;
-import org.yeastrc.proxl_import.api.xml_dto.FilterablePsmAnnotation;
-import org.yeastrc.proxl_import.api.xml_dto.FilterablePsmAnnotationTypes;
-import org.yeastrc.proxl_import.api.xml_dto.FilterablePsmAnnotations;
-import org.yeastrc.proxl_import.api.xml_dto.LinkType;
-import org.yeastrc.proxl_import.api.xml_dto.LinkedPosition;
-import org.yeastrc.proxl_import.api.xml_dto.LinkedPositions;
-import org.yeastrc.proxl_import.api.xml_dto.Linker;
-import org.yeastrc.proxl_import.api.xml_dto.Linkers;
-import org.yeastrc.proxl_import.api.xml_dto.Modification;
-import org.yeastrc.proxl_import.api.xml_dto.Modifications;
-import org.yeastrc.proxl_import.api.xml_dto.Peptide;
-import org.yeastrc.proxl_import.api.xml_dto.Peptides;
-import org.yeastrc.proxl_import.api.xml_dto.ProxlInput;
-import org.yeastrc.proxl_import.api.xml_dto.Psm;
-import org.yeastrc.proxl_import.api.xml_dto.PsmAnnotationCutoffsOnImport;
-import org.yeastrc.proxl_import.api.xml_dto.Psms;
-import org.yeastrc.proxl_import.api.xml_dto.ReportedPeptide;
-import org.yeastrc.proxl_import.api.xml_dto.ReportedPeptides;
-import org.yeastrc.proxl_import.api.xml_dto.SearchAnnotationCutoff;
-import org.yeastrc.proxl_import.api.xml_dto.SearchProgram;
+import org.yeastrc.proxl_import.api.xml_dto.*;
 import org.yeastrc.proxl_import.api.xml_dto.SearchProgram.PsmAnnotationTypes;
-import org.yeastrc.proxl_import.api.xml_dto.SearchProgramInfo;
-import org.yeastrc.proxl_import.api.xml_dto.SearchPrograms;
-import org.yeastrc.proxl_import.api.xml_dto.StaticModification;
-import org.yeastrc.proxl_import.api.xml_dto.StaticModifications;
-import org.yeastrc.proxl_import.api.xml_dto.VisiblePsmAnnotations;
 import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.CreateImportFileFromJavaObjectsMain;
 
 /**
@@ -64,7 +31,7 @@ import org.yeastrc.proxl_import.create_import_file_from_java_objects.main.Create
  */
 public class XMLBuilder {
 
-	public void buildAndSaveXML( StavroxAnalysis analysis, String linkerName, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
+	public void buildAndSaveXML(StavroxAnalysis analysis, StavroxCrosslinker stavroxLinker, String fastaFilePath, String scanFilename, int scanNumberAdjustment, File outputFile ) throws Exception {
 		
 		ProxlInput proxlInputRoot = new ProxlInput();
 		proxlInputRoot.setFastaFilename( ( new File( fastaFilePath ) ).getName() );
@@ -120,18 +87,59 @@ public class XMLBuilder {
 		Linker linker = new Linker();
 		linkers.getLinker().add( linker );
 		
-		linker.setName( linkerName );
+		linker.setName( stavroxLinker.getName() );
 		
 		CrosslinkMasses masses = new CrosslinkMasses();
 		linker.setCrosslinkMasses( masses );
 		
 		CrosslinkMass xlinkMass = new CrosslinkMass();
+		xlinkMass.setChemicalFormula( stavroxLinker.getFormula() );
 		linker.getCrosslinkMasses().getCrosslinkMass().add( xlinkMass );
 
 		// set the mass for this crosslinker to the calculated mass for the crosslinker, as defined in the properties file
 		xlinkMass.setMass( NumberUtils.getRoundedBigDecimal( analysis.getAnalysisProperties().getCrosslinker().getMass( analysis.getAnalysisProperties() ) ) );
 
-		
+		//
+		// Add in the linkable/reactable linker ends as defined in the stavrox config file
+		//
+		LinkedEnds xLinkedEnds = new LinkedEnds();
+		linker.setLinkedEnds( xLinkedEnds );
+
+		for(StavroxCrosslinkerEnd stavroxLinkerEnd : stavroxLinker.getCrosslinkerEnds() ) {
+
+			LinkedEnd xLinkedEnd = new LinkedEnd();
+			xLinkedEnds.getLinkedEnd().add( xLinkedEnd );
+
+			Residues xResidues = new Residues();
+			xResidues.getResidue().addAll( stavroxLinkerEnd.getResidues() );
+
+			xLinkedEnd.setResidues( xResidues );
+
+			ProteinTermini xProteinTermini = null;
+
+			if( stavroxLinkerEnd.isBindsCTerminus() || stavroxLinkerEnd.isBindsNTerminus() ) {
+
+				if( xProteinTermini == null ) {
+					xProteinTermini = new ProteinTermini();
+					xLinkedEnd.setProteinTermini( xProteinTermini );
+				}
+
+				if( stavroxLinkerEnd.isBindsCTerminus() ) {
+					ProteinTerminus xProteinTerminus = new ProteinTerminus();
+					xProteinTermini.getProteinTerminus().add( xProteinTerminus );
+
+					xProteinTerminus.setTerminusEnd( ProteinTerminusDesignation.C );
+				}
+
+				if( stavroxLinkerEnd.isBindsNTerminus() ) {
+					ProteinTerminus xProteinTerminus = new ProteinTerminus();
+					xProteinTermini.getProteinTerminus().add( xProteinTerminus );
+
+					xProteinTerminus.setTerminusEnd( ProteinTerminusDesignation.N );
+					xProteinTerminus.setDistanceFromTerminus( BigInteger.ZERO );
+				}
+			}
+		}
 		
 		//
 		// Define the static mods
@@ -154,8 +162,6 @@ public class XMLBuilder {
 				smods.getStaticModification().add( xmlSmod );
 			}	
 		}
-
-		
 		
 		//
 		// Add decoy labels (optional)
@@ -175,8 +181,7 @@ public class XMLBuilder {
 			
 			xmlDecoyLabel.setPrefix( decoyLabel );
 		}
-		
-		
+
 		//
 		// Define the peptide and PSM data
 		//

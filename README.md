@@ -20,15 +20,15 @@ For more information about Proxl, visit http://proxl-ms.org/.
 Command line documentation
 ---------------------------
 
-Usage: ``java -jar stavrox2ProxlXML.jar -r /path/to/results.file -l linker -f FASTA file full path [-s scan file name] -o /path/to/output.proxl.xml``
+Usage: ``java -jar stavrox2ProxlXML.jar -r /path/to/results.file -f FASTA file full path [-s scan file name] -o /path/to/output.proxl.xml``
 
 E.g.:
 
- ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml``
+ ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -f /path/to/yeast2016.fa -s mydata.mzML -o ./output.proxl.xml``
 
- ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f /path/to/yeast2016.fa -o ./output.proxl.xml``
+ ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -f /path/to/yeast2016.fa -o ./output.proxl.xml``
 
- ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -l dss -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml``
+ ``java -jar stavrox2ProxlXML.jar -r ./results.zhrs -f FASTA /path/to/yeast2016.fa -a 1 -s mydata.mzML -o ./output.proxl.xml``
 
 
 Required parameters:
@@ -38,9 +38,6 @@ Required parameters:
     
     -f </path/to/fasta.fa> -- The full path to the FASTA file used in the
                               StavroX analysis.
-    
-    -l <name of cross-linker> -- The name of the cross-linker used. See
-                                 below for a list of valid linkers.
     
     -o </path/to/output.xml> -- The full path to the desired output proxl
                                 XML file.
@@ -61,15 +58,3 @@ Optional parameters:
 	scans. In testing, the true scan number appears to always be 1 higher
 	than the reported scan number when using mzML files. "-a 1" will adjust
 	the scan numbers appropriately.
-	
-
-Valid linkers:
- * dss
- * bs3
- * edc
- * bs2
- * sulfo-smcc
- * dsso
- * tg (short for transglutaminase)
- * bs3.sty (supports links from K/nterm-K/S/T/Y/nterm)
- * dss.sty (supports links from K/nterm-K/S/T/Y/nterm)

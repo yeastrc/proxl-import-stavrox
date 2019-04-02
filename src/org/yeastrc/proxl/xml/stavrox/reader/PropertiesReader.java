@@ -3,8 +3,7 @@ package org.yeastrc.proxl.xml.stavrox.reader;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxStaticModification;
 import org.yeastrc.proxl.xml.stavrox.mods.StavroxVariableModification;
@@ -132,13 +131,14 @@ public class PropertiesReader {
 					String fields[] = currentLine.split( ";" );
 					
 					StavroxCrosslinker xlinker = new StavroxCrosslinker();
-					xlinker.setName( fields[ 0 ] );
+					xlinker.setName( fields[ 0 ].toLowerCase() );
 					xlinker.setFormula( fields[ 1 ] );
-					
-					xlinker.setBindingRules( new ArrayList<String>( 2 ) );
-					
-					for( int i = 2; i < fields.length; i++ ) {
-						xlinker.getBindingRules().add( fields[ i ] );
+
+					List<StavroxCrosslinkerEnd> linkerEnds = new ArrayList<>( 2 );
+					xlinker.setCrosslinkerEnds( linkerEnds );
+
+					for( int i = 2; i < 4; i++ ) {
+						linkerEnds.add( getLinkerEnd( fields[ i ] ) );
 					}
 					
 					ap.getCrosslinkers().add( xlinker );
@@ -189,6 +189,26 @@ public class PropertiesReader {
 		
 		
 		return ap;
+	}
+
+	private static StavroxCrosslinkerEnd getLinkerEnd( String linkerDefinition ) {
+
+		Collection<String> residues = new HashSet<>();
+		boolean linksCTerm = false;
+		boolean linksNTerm = false;
+
+		String[] definedResidues = linkerDefinition.split( "" );
+		for( String definedResidue : definedResidues ) {
+			if( definedResidue.equals( "}" ) ) {
+				linksCTerm = true;
+			} else if( definedResidue.equals( "{" ) ) {
+				linksNTerm = true;
+			} else {
+				residues.add( definedResidue );
+			}
+		}
+
+		return new StavroxCrosslinkerEnd( residues, linksNTerm, linksCTerm );
 	}
 	
 }

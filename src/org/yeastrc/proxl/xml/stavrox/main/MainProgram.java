@@ -27,7 +27,6 @@ public class MainProgram {
 	 * Do the data conversion and save the XML file
 	 * 
 	 * @param filename The path of the results file
-	 * @param linkerName The name of the cross-linker
 	 * @param fastaFilename The name of the FASTA file
 	 * @param scanFilename The name of the scan filename
 	 * @param scanNumberAdjustment The amount to adjust the reported scan numbers by
@@ -35,29 +34,14 @@ public class MainProgram {
 	 * 
 	 * @throws Exception If there is a problem
 	 */
-	private void convertData( String filename, String linkerName, String fastaFilename, String scanFilename, int scanNumberAdjustment, String outputFilename ) throws Exception {
+	private void convertData( String filename, String fastaFilename, String scanFilename, int scanNumberAdjustment, String outputFilename ) throws Exception {
 		
 		File file = new File( filename );
 		StavroxAnalysisLoader loader = new StavroxAnalysisLoader();
-		
 		StavroxAnalysis analysis = loader.loadStavroxAnalysis( file );
 		
-		// ensure the linker they entered maps to a linker in the properties file
-		String stavroxLinker = LinkerMapper.getStavroxCrosslinkerName( linkerName );
-		if( !stavroxLinker.equals( analysis.getAnalysisProperties().getCrosslinker().getName() ) ) {
-			String message = "Entered linker: " + linkerName + " does not map to linker in properties: " + analysis.getAnalysisProperties().getCrosslinker().getName();
-			throw new Exception( message );
-		}
-		
-		/*
-		// test print out the all linkers and calculated masses from properties file
-		for( StavroxCrosslinker linker : analysis.getAnalysisProperties().getCrosslinkers() ) {
-			System.out.println( linker.getName() + " : " + linker.getFormula() + " : calculated mass: " + LinkerUtils.calculateLinkerMass( linker, analysis.getAnalysisProperties() ) );
-		}
-		*/
-		
 		XMLBuilder builder = new XMLBuilder();
-		builder.buildAndSaveXML(analysis, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, new File( outputFilename ) );
+		builder.buildAndSaveXML(analysis, analysis.getAnalysisProperties().getCrosslinker(), fastaFilename, scanFilename, scanNumberAdjustment, new File( outputFilename ) );
 		
 	}
 	
@@ -74,26 +58,20 @@ public class MainProgram {
 		CmdLineParser cmdLineParser = new CmdLineParser();
         
 		CmdLineParser.Option resultsFilenameOpt = cmdLineParser.addStringOption( 'r', "results" );	
-		CmdLineParser.Option linkerOpt = cmdLineParser.addStringOption( 'l', "linker" );	
-		CmdLineParser.Option fastaOpt = cmdLineParser.addStringOption( 'f', "fasta_file" );	
+		CmdLineParser.Option fastaOpt = cmdLineParser.addStringOption( 'f', "fasta_file" );
 		CmdLineParser.Option scanFileWithPathCommandLineOpt = cmdLineParser.addStringOption( 's', "scan_file" );
 		CmdLineParser.Option outputFilenameOpt = cmdLineParser.addStringOption( 'o', "output_file" );
 		CmdLineParser.Option scanNumberAdjustmentOpt = cmdLineParser.addIntegerOption( 'a', "scan_adjust" );
 
         // parse command line options
         try { cmdLineParser.parse(args); }
-        catch (IllegalOptionValueException e) {
+        catch (IllegalOptionValueException | UnknownOptionException e) {
         	printHelp();
             System.exit( 1 );
         }
-        catch (UnknownOptionException e) {
-           printHelp();
-           System.exit( 1 );
-        }
-		
-        
-        String linkerName = (String)cmdLineParser.getOptionValue( linkerOpt );
-        String resultsFilename = (String)cmdLineParser.getOptionValue( resultsFilenameOpt );
+
+
+		String resultsFilename = (String)cmdLineParser.getOptionValue( resultsFilenameOpt );
         String fastaFilename = (String)cmdLineParser.getOptionValue( fastaOpt );
         String scanFilename = (String)cmdLineParser.getOptionValue( scanFileWithPathCommandLineOpt );
         String outputFilename = (String)cmdLineParser.getOptionValue( outputFilenameOpt );
@@ -102,7 +80,7 @@ public class MainProgram {
         if( scanNumberAdjustment == null ) scanNumberAdjustment = 0;
 		
 		MainProgram mp = new MainProgram();
-		mp.convertData( resultsFilename, linkerName, fastaFilename, scanFilename, scanNumberAdjustment, outputFilename );
+		mp.convertData( resultsFilename, fastaFilename, scanFilename, scanNumberAdjustment, outputFilename );
 
 	}
 	
