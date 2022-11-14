@@ -3,6 +3,10 @@ StavroX 3 to Proxl XML Converter
 
 Use this program to convert the results of a StavroX 3 analysis to Proxl XML suitable for import into the proxl web application.
 
+MeroX 2 to Proxl XML Converter
+==============================
+MeroX has replaced StavroX by its developers, and StavroX is no longer maintained. We have developed a MeroX Proxl XML converter, it is available here: https://github.com/yeastrc/proxl-import-merox
+
 How To Run
 -------------
 1. Download the [latest release](https://github.com/yeastrc/proxl-import-stavrox/releases).
